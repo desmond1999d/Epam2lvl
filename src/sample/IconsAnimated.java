@@ -33,7 +33,7 @@ public class IconsAnimated extends Pane {
         imageView.setViewport(new Rectangle2D(Offset_x, Offset_y, Width, Height));
         animation = new SpriteAnimation(
                 imageView,
-                Duration.millis(800),
+                Duration.millis(600),
                 Count, Columns,
                 Offset_x, Offset_y,
                 Width, Height
@@ -43,7 +43,12 @@ public class IconsAnimated extends Pane {
         animation.play();
     }
 
-    public void Go ()
+    public void SetDirectionInfo(int offX, int offY)
+    {
+        animation.SetDir(offX, offY);
+    }
+
+    public void GoLeft ()
     {
         this.setTranslateX(this.getTranslateX() - 1);
     }

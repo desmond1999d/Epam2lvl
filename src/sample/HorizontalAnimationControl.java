@@ -5,12 +5,12 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
-public class AnimationControl {
+public class HorizontalAnimationControl {
 
     Image image = new Image("sample/Pacman10-hp-sprite.png");
     IconsAnimated iconsAnimated;
 
-    public AnimationControl(int columns, int count, int offsetX, int offsetY, int width, int height)
+    public HorizontalAnimationControl(int columns, int count, int offsetX, int offsetY, int width, int height)
     {
         ImageView imageView = new ImageView(image);
         imageView.setScaleX(2);
@@ -20,7 +20,9 @@ public class AnimationControl {
 
     public void update()
     {
-        iconsAnimated.Go();
+        iconsAnimated.GoLeft();
+        if (iconsAnimated.getTranslateX() < -20)
+            iconsAnimated.setTranslateX(iconsAnimated.getScene().getWidth() + 100);
     }
 
     public void Launch(Pane pane)
@@ -35,12 +37,12 @@ public class AnimationControl {
         timer.start();
     }
 
-    public void PacmanSetTranslateX(double x)
+    public void IconSetTranslateX(double x)
     {
         iconsAnimated.setTranslateX(x);
     }
 
-    public void PacmanSetTranslateY(double y)
+    public void IconSetTranslateY(double y)
     {
         iconsAnimated.setTranslateY(y);
     }
