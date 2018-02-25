@@ -22,10 +22,11 @@ public class Main extends Application {
         primaryStage.setTitle("Tests");
         Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
         MainMenu mainMenu = new MainMenu();
+        MapScene mapScene = new MapScene();
 
         primaryStage.setWidth(primaryScreenBounds.getWidth());
         primaryStage.setHeight(primaryScreenBounds.getHeight());
-        primaryStage.setScene(mainMenu.GetScene());
+        primaryStage.setScene(mapScene.GetScene());
         primaryStage.show();
     }
 

@@ -24,6 +24,10 @@ public class RecordPanel {
         OneUpValue = new Label("00");
         HighScoreValue = new Label("00");
         TwoUpValue = new Label("00");
+        Font pacManFont = Font.loadFont(getClass()
+                .getResourceAsStream("Joystix.TTF"), 30);
+        SetColor();
+        SetFont(pacManFont);
     }
 
     public void SetFont(Font font)
@@ -61,5 +65,29 @@ public class RecordPanel {
         pane.setConstraints(HighScoreValue, 1, 1);
         pane.setConstraints(TwoUpValue, 2, 1);
         pane.getChildren().addAll(OneUp, HighScore, TwoUp, OneUpValue, HighScoreValue, TwoUpValue);
+    }
+
+    public Label GetTwoUp(){
+        return TwoUp;
+    }
+
+    public Label GetOneUp(){
+        return OneUp;
+    }
+
+    public Label GetHighscore(){
+        return HighScore;
+    }
+
+    public Label GetOneUpValue(){
+        return OneUpValue;
+    }
+
+    public Label GetTwoUpValue(){
+        return TwoUpValue;
+    }
+
+    public Label GetHighscoreValue(){
+        return HighScoreValue;
     }
 }
