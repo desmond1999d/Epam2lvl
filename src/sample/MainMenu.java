@@ -8,10 +8,10 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Screen;
+import javafx.stage.Stage;
 
-public class MainMenu {
+public class MainMenu extends Scene {
 
-    private Scene mainMenuScene;
     private GridPane pane;
     private Font pacManFont;
     private StackPane PlayerChoisePane;
@@ -20,15 +20,15 @@ public class MainMenu {
     private PlayersQuantity playersQuantity;
     private MainMenuAnimation anim;
 
-    public MainMenu()
+    public MainMenu(GridPane constructorPane, Stage stage)
     {
-        pane = new GridPane();
-        mainMenuScene = new Scene(pane);
+        super(constructorPane);
+        pane = constructorPane;
         mainLogo = new MainLogo();
         PlayerChoisePane = new StackPane();
         recordPanel = new RecordPanel();
-        playersQuantity = new PlayersQuantity(PlayerChoisePane);
-        anim = new MainMenuAnimation(pane);
+        playersQuantity = new PlayersQuantity(PlayerChoisePane, stage);
+        anim = new MainMenuAnimation(pane, 500);
         GetItTogether();
     }
 
@@ -36,7 +36,7 @@ public class MainMenu {
     {
         recordPanel.SetFont(pacManFont);
         recordPanel.SetColor();
-        recordPanel.AddToGrid(pane);
+        recordPanel.AddToGrid(pane, 0, 0, 1, 0, 2, 0);
     }
 
     private void GetItTogether()
@@ -62,10 +62,5 @@ public class MainMenu {
     {
         playersQuantity.SetFont(pacManFont);
         playersQuantity.SetColor(Color.WHITE);
-    }
-
-    public Scene GetScene()
-    {
-        return mainMenuScene;
     }
 }

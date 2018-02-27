@@ -50,7 +50,7 @@ public class RecordPanel {
         HighScoreValue.setTextFill(Color.WHITE);
     }
 
-    public void AddToGrid(GridPane pane)
+    public void AddToGrid(GridPane pane, int oneUpX, int oneUpY, int highScoreX, int highScoreY, int twoUpX, int twoUpY)
     {
         GridPane.setHalignment(OneUp, HPos.CENTER);
         GridPane.setHalignment(HighScore, HPos.CENTER);
@@ -58,12 +58,12 @@ public class RecordPanel {
         GridPane.setHalignment(OneUpValue, HPos.CENTER);
         GridPane.setHalignment(HighScoreValue, HPos.CENTER);
         GridPane.setHalignment(TwoUpValue, HPos.CENTER);
-        pane.setConstraints(OneUp, 0, 0);
-        pane.setConstraints(HighScore, 1, 0);
-        pane.setConstraints(TwoUp, 2, 0);
-        pane.setConstraints(OneUpValue, 0, 1);
-        pane.setConstraints(HighScoreValue, 1, 1);
-        pane.setConstraints(TwoUpValue, 2, 1);
+        pane.setConstraints(OneUp, oneUpX, oneUpY);
+        pane.setConstraints(HighScore, highScoreX, highScoreY);
+        pane.setConstraints(TwoUp, twoUpX, twoUpY);
+        pane.setConstraints(OneUpValue, oneUpX, oneUpY+1);
+        pane.setConstraints(HighScoreValue, highScoreX, highScoreY+1);
+        pane.setConstraints(TwoUpValue, twoUpX, twoUpY+1);
         pane.getChildren().addAll(OneUp, HighScore, TwoUp, OneUpValue, HighScoreValue, TwoUpValue);
     }
 

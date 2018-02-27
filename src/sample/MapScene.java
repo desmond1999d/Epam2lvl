@@ -1,5 +1,6 @@
 package sample;
 
+import javafx.animation.AnimationTimer;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
@@ -12,27 +13,23 @@ import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
 
-public class MapScene {
+public class MapScene extends Scene {
 
     private Pane mainPane;
-    private Scene scene;
     private ImageView imageView;
     private RecordPanel recordPanel;
-    private Label oneUp;
-    private Label twoUp;
-    private Label highScore;
-    private Label oneUpValue;
-    private Label twoUpValue;
-    private Label highScoreValue;
     private Rectangle2D primaryScreenBounds;
+    private MainMenuAnimation animation;
 
-    public MapScene() {
+    public MapScene(Pane pane){
+        super(pane);
         recordPanel = new RecordPanel();
-        mainPane = new Pane();
-        scene = new Scene(mainPane);
+        mainPane = pane;
         Image image = new Image("sample/Pacman10-hp-sprite.png");
         imageView = new ImageView(image);
+        animation = new MainMenuAnimation(mainPane, 550);
         primaryScreenBounds = Screen.getPrimary().getVisualBounds();
         BuildMap();
         BuildRecordPanel();
@@ -51,28 +48,14 @@ public class MapScene {
     }
 
     public void BuildRecordPanel() {
-        oneUp = recordPanel.GetOneUp();
-        twoUp = recordPanel.GetTwoUp();
-        highScore = recordPanel.GetHighscore();
-        oneUpValue = recordPanel.GetOneUpValue();
-        twoUpValue = recordPanel.GetTwoUpValue();
-        highScoreValue = recordPanel.GetHighscoreValue();
-//        HBox labelHBox = new HBox();
-//        HBox valueHBox = new HBox();
-//        labelHBox.getChildren().addAll(oneUp, twoUp, highScore);
-//        valueHBox.getChildren().addAll(oneUpValue, twoUpValue, highScoreValue);
-//        labelHBox.setAlignment(Pos.CENTER);
-//        valueHBox.setAlignment(Pos.CENTER);
-//        valueHBox.setPrefWidth(primaryScreenBounds.getWidth());
-//        labelHBox.setPrefWidth(primaryScreenBounds.getWidth());
-//        labelHBox.setSpacing(150);
-//        labelHBox.setTranslateY(450);
-//        valueHBox.setSpacing(150);
-//        valueHBox.setTranslateY(500);
-//        mainPane.getChildren().addAll(labelHBox, valueHBox);
-    }
+        GridPane gridPane = new GridPane();
+        recordPanel.AddToGrid(gridPane, 0, 0, 1, 0, 2, 0);
+        gridPane.setTranslateY(420);
+        gridPane.setVgap(10);
+        ColumnConstraints columnConstraints = new ColumnConstraints();
+        columnConstraints.setPrefWidth(primaryScreenBounds.getWidth()/3);
+        gridPane.getColumnConstraints().addAll(columnConstraints, columnConstraints, columnConstraints);
+        mainPane.getChildren().addAll(gridPane);
 
-    public Scene GetScene() {
-        return scene;
     }
 }

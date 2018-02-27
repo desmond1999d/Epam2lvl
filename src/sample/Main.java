@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Screen;
@@ -21,12 +22,12 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
         primaryStage.setTitle("Tests");
         Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
-        MainMenu mainMenu = new MainMenu();
-        MapScene mapScene = new MapScene();
+        MainMenu mainMenu = new MainMenu(new GridPane(), primaryStage);
+        MapScene mapScene = new MapScene(new Pane());
 
         primaryStage.setWidth(primaryScreenBounds.getWidth());
         primaryStage.setHeight(primaryScreenBounds.getHeight());
-        primaryStage.setScene(mapScene.GetScene());
+        primaryStage.setScene(mainMenu);
         primaryStage.show();
     }
 

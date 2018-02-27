@@ -4,9 +4,13 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.stage.Stage;
 
 import java.awt.*;
 
@@ -15,9 +19,11 @@ public class PlayersQuantity {
     private Label OnePlayer;
     private Label TwoPlayers;
     private ImageView ChoiseSymbol;
+    private Stage primaryStage;
 
-    public PlayersQuantity(StackPane pane)
+    public PlayersQuantity(StackPane pane, Stage stage)
     {
+        primaryStage = stage;
         OnePlayer = new Label("1 PLAYER");
         TwoPlayers = new Label("2 PLAYERS");
         Image ChoiseImage = new Image("sample/Original_PacMan.png");
@@ -48,6 +54,22 @@ public class PlayersQuantity {
                     PlayerChoisePane.setAlignment(ChoiseSymbol, Pos.CENTER_LEFT);
                 }
         );
+        OnePlayer.setOnMouseClicked(
+                event ->
+                {
+                    MapScene mapScene = new MapScene(new Pane());
+                    primaryStage.setScene(mapScene);
+                    mapScene.setOnKeyPressed(
+                            event1 ->
+                            {
+                                if (event1.getCode() == KeyCode.ESCAPE)
+                                {
+                                    primaryStage.setScene(new MainMenu(new GridPane(), primaryStage));
+                                }
+                            }
+                    );
+                }
+        );
         OnePlayer.setOnMouseExited(event->
         {
             OnePlayer.setTextFill(Color.WHITE);
@@ -62,6 +84,28 @@ public class PlayersQuantity {
         {
             TwoPlayers.setTextFill(Color.WHITE);
         });
+        TwoPlayers.setOnMouseClicked(
+                event ->
+                {
+                    primaryStage.setScene(new MapScene(new Pane()));
+                }
+        );
+        TwoPlayers.setOnMouseClicked(
+                event ->
+                {
+                    MapScene mapScene = new MapScene(new Pane());
+                    primaryStage.setScene(mapScene);
+                    mapScene.setOnKeyPressed(
+                            event1 ->
+                            {
+                                if (event1.getCode() == KeyCode.ESCAPE)
+                                {
+                                    primaryStage.setScene(new MainMenu(new GridPane(), primaryStage));
+                                }
+                            }
+                    );
+                }
+        );
     }
 
     public void SetAlligment(StackPane PlayerChoisePane)

@@ -10,27 +10,27 @@ public class MainMenuAnimation {
     private HorizontalAnimationControl animationControl3;
     private HorizontalAnimationControl animationControl4;
 
-    public MainMenuAnimation(Pane pane)
+    public MainMenuAnimation(Pane pane, int posY)
     {
         animationControl1 = new HorizontalAnimationControl(3, 3, 0, 0, 20, 20);
         animationControl2 = new HorizontalAnimationControl(2, 2, 80, 80, 20, 20);
         animationControl3 = new HorizontalAnimationControl(2, 2, 80, 100, 20, 20);
         animationControl4 = new HorizontalAnimationControl(2, 2, 80, 120, 20, 20);
-        Set();
+        Set(posY);
         Activate(pane);
     }
 
-    public void Set()
+    public void Set(int posY)
     {
         double screenWidth = Screen.getPrimary().getVisualBounds().getWidth();
         animationControl1.IconSetTranslateX(screenWidth+100);
         animationControl2.IconSetTranslateX(screenWidth+200);
         animationControl3.IconSetTranslateX(screenWidth+250);
         animationControl4.IconSetTranslateX(screenWidth+300);
-        animationControl1.IconSetTranslateY(500);
-        animationControl2.IconSetTranslateY(500);
-        animationControl3.IconSetTranslateY(500);
-        animationControl4.IconSetTranslateY(500);
+        animationControl1.IconSetTranslateY(posY);
+        animationControl2.IconSetTranslateY(posY);
+        animationControl3.IconSetTranslateY(posY);
+        animationControl4.IconSetTranslateY(posY);
     }
 
     public void Activate(Pane pane)
