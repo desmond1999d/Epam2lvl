@@ -5,10 +5,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
-public class HorizontalAnimationControl {
+class HorizontalAnimationControl {
 
-    Image image = new Image("sample/Pacman10-hp-sprite.png");
-    IconsAnimated iconsAnimated;
+    private Image image = new Image("sample/Pacman10-hp-sprite.png");
+    private IconsAnimated iconsAnimated;
 
     public HorizontalAnimationControl(int columns, int count, int offsetX, int offsetY, int width, int height)
     {
@@ -20,12 +20,12 @@ public class HorizontalAnimationControl {
 
     public void update()
     {
-        iconsAnimated.GoLeft();
+        iconsAnimated.goLeft();
         if (iconsAnimated.getTranslateX() < -20)
             iconsAnimated.setTranslateX(iconsAnimated.getScene().getWidth() + 100);
     }
 
-    public void Launch(Pane pane)
+    public void launch(Pane pane)
     {
         pane.getChildren().addAll(iconsAnimated);
         AnimationTimer timer = new AnimationTimer() {
@@ -37,12 +37,12 @@ public class HorizontalAnimationControl {
         timer.start();
     }
 
-    public void IconSetTranslateX(double x)
+    public void iconSetTranslateX(double x)
     {
         iconsAnimated.setTranslateX(x);
     }
 
-    public void IconSetTranslateY(double y)
+    public void iconSetTranslateY(double y)
     {
         iconsAnimated.setTranslateY(y);
     }

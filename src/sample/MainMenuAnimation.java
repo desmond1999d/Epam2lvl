@@ -16,28 +16,28 @@ public class MainMenuAnimation {
         animationControl2 = new HorizontalAnimationControl(2, 2, 80, 80, 20, 20);
         animationControl3 = new HorizontalAnimationControl(2, 2, 80, 100, 20, 20);
         animationControl4 = new HorizontalAnimationControl(2, 2, 80, 120, 20, 20);
-        Set(posY);
-        Activate(pane);
+        set(posY);
+        activate(pane);
     }
 
-    public void Set(int posY)
+    private void set(int posY)
     {
         double screenWidth = Screen.getPrimary().getVisualBounds().getWidth();
-        animationControl1.IconSetTranslateX(screenWidth+100);
-        animationControl2.IconSetTranslateX(screenWidth+200);
-        animationControl3.IconSetTranslateX(screenWidth+250);
-        animationControl4.IconSetTranslateX(screenWidth+300);
-        animationControl1.IconSetTranslateY(posY);
-        animationControl2.IconSetTranslateY(posY);
-        animationControl3.IconSetTranslateY(posY);
-        animationControl4.IconSetTranslateY(posY);
+        animationControl1.iconSetTranslateX(screenWidth+100);
+        animationControl2.iconSetTranslateX(screenWidth+200);
+        animationControl3.iconSetTranslateX(screenWidth+250);
+        animationControl4.iconSetTranslateX(screenWidth+300);
+        animationControl1.iconSetTranslateY(posY);
+        animationControl2.iconSetTranslateY(posY);
+        animationControl3.iconSetTranslateY(posY);
+        animationControl4.iconSetTranslateY(posY);
     }
 
-    public void Activate(Pane pane)
+    private void activate(Pane pane)
     {
-        animationControl1.Launch(pane);
-        animationControl2.Launch(pane);
-        animationControl3.Launch(pane);
-        animationControl4.Launch(pane);
+        animationControl1.launch(pane);
+        animationControl2.launch(pane);
+        animationControl3.launch(pane);
+        animationControl4.launch(pane);
     }
 }

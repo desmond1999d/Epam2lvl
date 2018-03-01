@@ -35,7 +35,7 @@ public class SpriteAnimation extends Transition {
         setInterpolator(Interpolator.LINEAR);
     }
 
-    public void SetDir(int newOffX, int newOffY)
+    public void setDir(int newOffX, int newOffY)
     {
         this.offsetX = newOffX;
         this.offsetY = newOffY;

@@ -4,122 +4,117 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
-import java.awt.*;
-
 public class PlayersQuantity {
-
-    private Label OnePlayer;
-    private Label TwoPlayers;
-    private ImageView ChoiseSymbol;
+    private Label onePlayer;
+    private Label twoPlayers;
+    private ImageView choiseSymbol;
     private Stage primaryStage;
+    private StackPane playerChoisePane;
 
     public PlayersQuantity(StackPane pane, Stage stage)
     {
         primaryStage = stage;
-        OnePlayer = new Label("1 PLAYER");
-        TwoPlayers = new Label("2 PLAYERS");
+        playerChoisePane = pane;
+        onePlayer = new Label("1 PLAYER");
+        twoPlayers = new Label("2 PLAYERS");
         Image ChoiseImage = new Image("sample/Original_PacMan.png");
-        ChoiseSymbol = new ImageView(ChoiseImage);
-        ChoiseSymbolSettings();
-        SetActions(pane);
-        SetAlligment(pane);
-        pane.getChildren().addAll(OnePlayer, TwoPlayers, ChoiseSymbol);
+        choiseSymbol = new ImageView(ChoiseImage);
+        choiseSymbolSettings();
+        setActions();
+        setAlligment(pane);
+        pane.getChildren().addAll(onePlayer, twoPlayers, choiseSymbol);
     }
 
-    public void SetFont(Font font)
+    /** set font
+     * @param font - font for labels
+     * @return - nothing
+     */
+    public void setFont(Font font)
     {
-        OnePlayer.setFont(font);
-        TwoPlayers.setFont(font);
+        onePlayer.setFont(font);
+        twoPlayers.setFont(font);
     }
 
-    public void SetColor(Color color)
+    public void setColor(Color color)
     {
-        OnePlayer.setTextFill(color);
-        TwoPlayers.setTextFill(color);
+        onePlayer.setTextFill(color);
+        twoPlayers.setTextFill(color);
     }
 
-    public void SetActions(StackPane PlayerChoisePane)
+    public void onePlayerChosen()
     {
-        OnePlayer.setOnMouseEntered(event ->
+        onePlayer.setTextFill(Color.RED);
+        playerChoisePane.setAlignment(choiseSymbol, Pos.CENTER_LEFT);
+    }
+
+    public void twoPlayersChosen()
+    {
+        twoPlayers.setTextFill(Color.RED);
+        playerChoisePane.setAlignment(choiseSymbol, Pos.BOTTOM_LEFT);
+    }
+
+    public void onePlayerNotChosen()
+    {
+        onePlayer.setTextFill(Color.WHITE);
+    }
+
+    public void twoPlayersNotChosen()
+    {
+        twoPlayers.setTextFill(Color.WHITE);
+    }
+
+    public void setActions()
+    {
+        onePlayer.setOnMouseEntered(event ->
                 {
-                    OnePlayer.setTextFill(Color.RED);
-                    PlayerChoisePane.setAlignment(ChoiseSymbol, Pos.CENTER_LEFT);
+                    onePlayerChosen();
                 }
         );
-        OnePlayer.setOnMouseClicked(
+        onePlayer.setOnMouseClicked(
                 event ->
                 {
-                    MapScene mapScene = new MapScene(new Pane());
-                    primaryStage.setScene(mapScene);
-                    mapScene.setOnKeyPressed(
-                            event1 ->
-                            {
-                                if (event1.getCode() == KeyCode.ESCAPE)
-                                {
-                                    primaryStage.setScene(new MainMenu(new GridPane(), primaryStage));
-                                }
-                            }
-                    );
+                    primaryStage.setScene(new MapScene(new Pane(), primaryStage));
                 }
         );
-        OnePlayer.setOnMouseExited(event->
+        onePlayer.setOnMouseExited(event->
         {
-            OnePlayer.setTextFill(Color.WHITE);
+            onePlayerNotChosen();
         });
-        TwoPlayers.setOnMouseEntered(event ->
+        twoPlayers.setOnMouseEntered(event ->
                 {
-                    TwoPlayers.setTextFill(Color.RED);
-                    PlayerChoisePane.setAlignment(ChoiseSymbol, Pos.BOTTOM_LEFT);
+                    twoPlayersChosen();
                 }
         );
-        TwoPlayers.setOnMouseExited(event->
+        twoPlayers.setOnMouseExited(event->
         {
-            TwoPlayers.setTextFill(Color.WHITE);
+            twoPlayersNotChosen();
         });
-        TwoPlayers.setOnMouseClicked(
+        twoPlayers.setOnMouseClicked(
                 event ->
                 {
-                    primaryStage.setScene(new MapScene(new Pane()));
-                }
-        );
-        TwoPlayers.setOnMouseClicked(
-                event ->
-                {
-                    MapScene mapScene = new MapScene(new Pane());
-                    primaryStage.setScene(mapScene);
-                    mapScene.setOnKeyPressed(
-                            event1 ->
-                            {
-                                if (event1.getCode() == KeyCode.ESCAPE)
-                                {
-                                    primaryStage.setScene(new MainMenu(new GridPane(), primaryStage));
-                                }
-                            }
-                    );
+                    primaryStage.setScene(new MapScene(new Pane(), primaryStage));
                 }
         );
     }
 
-    public void SetAlligment(StackPane PlayerChoisePane)
+    public void setAlligment(StackPane playerChoisePane)
     {
-        PlayerChoisePane.setAlignment(OnePlayer, Pos.CENTER);
-        PlayerChoisePane.setAlignment(TwoPlayers, Pos.BOTTOM_CENTER);
-        PlayerChoisePane.setAlignment(ChoiseSymbol, Pos.CENTER_LEFT);
+        playerChoisePane.setAlignment(onePlayer, Pos.CENTER);
+        playerChoisePane.setAlignment(twoPlayers, Pos.BOTTOM_CENTER);
+        playerChoisePane.setAlignment(choiseSymbol, Pos.CENTER_LEFT);
     }
 
-    public void ChoiseSymbolSettings()
+    public void choiseSymbolSettings()
     {
-        ChoiseSymbol.setFitWidth(30);
-        ChoiseSymbol.setFitHeight(30);
-        ChoiseSymbol.setRotate(ChoiseSymbol.getRotate() + 180);
-        ChoiseSymbol.setTranslateX(50);
+        choiseSymbol.setFitWidth(30);
+        choiseSymbol.setFitHeight(30);
+        choiseSymbol.setRotate(choiseSymbol.getRotate() + 180);
+        choiseSymbol.setTranslateX(50);
     }
 }

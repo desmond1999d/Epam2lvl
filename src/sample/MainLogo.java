@@ -7,25 +7,25 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 
 public class MainLogo {
-    Image logoImage;
-    ImageView pacManLogo;
-    VBox LogoBox;
+    private Image logoImage;
+    private ImageView pacManLogo;
+    private VBox logoBox;
 
     public MainLogo()
     {
-        Image logoImage = new Image("sample/Pacman_logo.png");
-        ImageView pacManLogo = new ImageView(logoImage);
-        LogoBox = new VBox();
-        LogoBox.setMinHeight(250);
+        logoImage = new Image("sample/Pacman_logo.png");
+        pacManLogo = new ImageView(logoImage);
+        logoBox = new VBox();
+        logoBox.setMinHeight(250);
         pacManLogo.setScaleX(1.2);
         pacManLogo.setScaleY(1.2);
-        LogoBox.getChildren().addAll(pacManLogo);
-        LogoBox.setAlignment(Pos.BOTTOM_CENTER);
+        logoBox.getChildren().addAll(pacManLogo);
+        logoBox.setAlignment(Pos.BOTTOM_CENTER);
     }
 
-    public void AddToPane(GridPane pane)
+    public void addToPane(GridPane pane)
     {
-        pane.setConstraints(LogoBox, 1, 2);
-        pane.getChildren().addAll(LogoBox);
+        pane.setConstraints(logoBox, 1, 2);
+        pane.getChildren().addAll(logoBox);
     }
 }

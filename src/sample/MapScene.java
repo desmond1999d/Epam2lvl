@@ -1,41 +1,43 @@
 package sample;
 
-import javafx.animation.AnimationTimer;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Screen;
+import javafx.stage.Stage;
 
-import java.awt.*;
-import java.awt.event.KeyEvent;
-
-public class MapScene extends Scene {
+class MapScene extends Scene {
 
     private Pane mainPane;
     private ImageView imageView;
     private RecordPanel recordPanel;
     private Rectangle2D primaryScreenBounds;
+    private Stage primaryStage;
     private MainMenuAnimation animation;
 
-    public MapScene(Pane pane){
+    public MapScene(Pane pane, Stage stage){
         super(pane);
         recordPanel = new RecordPanel();
         mainPane = pane;
+        primaryStage = stage;
         Image image = new Image("sample/Pacman10-hp-sprite.png");
         imageView = new ImageView(image);
         animation = new MainMenuAnimation(mainPane, 550);
         primaryScreenBounds = Screen.getPrimary().getVisualBounds();
-        BuildMap();
-        BuildRecordPanel();
+        buildMap();
+        buildRecordPanel();
+        setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ESCAPE)
+                primaryStage.setScene(new MainMenu(new GridPane(), primaryStage));
+        });
     }
 
-    public void BuildMap() {
+    public void buildMap() {
         mainPane.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
         final int x = 322;
         final int y = 0;
@@ -47,9 +49,11 @@ public class MapScene extends Scene {
         mainPane.getChildren().addAll(imageView);
     }
 
-    public void BuildRecordPanel() {
+
+
+    public void buildRecordPanel() {
         GridPane gridPane = new GridPane();
-        recordPanel.AddToGrid(gridPane, 0, 0, 1, 0, 2, 0);
+        recordPanel.addToGrid(gridPane, 0, 0, 1, 0, 2, 0);
         gridPane.setTranslateY(420);
         gridPane.setVgap(10);
         ColumnConstraints columnConstraints = new ColumnConstraints();

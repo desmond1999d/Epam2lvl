@@ -4,6 +4,7 @@ import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -14,32 +15,64 @@ public class MainMenu extends Scene {
 
     private GridPane pane;
     private Font pacManFont;
-    private StackPane PlayerChoisePane;
+    private StackPane playerChoisePane;
     private RecordPanel recordPanel;
     private MainLogo mainLogo;
     private PlayersQuantity playersQuantity;
     private MainMenuAnimation anim;
+    private Stage primaryStage;
+    private boolean onePlayerChosen;
+    private boolean twoPlayersChosen;
 
     public MainMenu(GridPane constructorPane, Stage stage)
     {
         super(constructorPane);
         pane = constructorPane;
+        primaryStage = stage;
         mainLogo = new MainLogo();
-        PlayerChoisePane = new StackPane();
+        playerChoisePane = new StackPane();
         recordPanel = new RecordPanel();
-        playersQuantity = new PlayersQuantity(PlayerChoisePane, stage);
+        playersQuantity = new PlayersQuantity(playerChoisePane, primaryStage);
         anim = new MainMenuAnimation(pane, 500);
-        GetItTogether();
+        getItTogether();
+        setActions();
     }
 
-    private void SetRecordPanel()
+    private void setActions()
     {
-        recordPanel.SetFont(pacManFont);
-        recordPanel.SetColor();
-        recordPanel.AddToGrid(pane, 0, 0, 1, 0, 2, 0);
+        setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.UP)
+            {
+                playersQuantity.onePlayerChosen();
+                playersQuantity.twoPlayersNotChosen();
+                onePlayerChosen = true;
+                twoPlayersChosen = false;
+            }
+            else if (event.getCode() == KeyCode.DOWN)
+            {
+                playersQuantity.twoPlayersChosen();
+                playersQuantity.onePlayerNotChosen();
+                twoPlayersChosen = true;
+                onePlayerChosen = false;
+            }
+            else if (event.getCode() == KeyCode.ENTER)
+            {
+                if (onePlayerChosen == true)
+                    primaryStage.setScene(new MapScene(new Pane(), primaryStage));
+                else if (twoPlayersChosen == true)
+                    primaryStage.setScene(new MapScene(new Pane(), primaryStage));
+            }
+        });
     }
 
-    private void GetItTogether()
+    private void setRecordPanel()
+    {
+        recordPanel.setFont(pacManFont);
+        recordPanel.setColor();
+        recordPanel.addToGrid(pane, 0, 0, 1, 0, 2, 0);
+    }
+
+    private void getItTogether()
     {
         ColumnConstraints columnConstraints = new ColumnConstraints();
         pane.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
@@ -48,19 +81,19 @@ public class MainMenu extends Scene {
         pane.getColumnConstraints().addAll(columnConstraints, columnConstraints, columnConstraints);
         pacManFont = Font.loadFont(getClass()
                 .getResourceAsStream("Joystix.TTF"), 30);
-        PlayerChoisePane.setMinHeight(120);
-        GridPane.setHalignment(PlayerChoisePane, HPos.CENTER);
-        pane.setConstraints(PlayerChoisePane, 1, 3);
-        SetRecordPanel();
-        SetPlayersQuantity();
+        playerChoisePane.setMinHeight(120);
+        GridPane.setHalignment(playerChoisePane, HPos.CENTER);
+        pane.setConstraints(playerChoisePane, 1, 3);
+        setRecordPanel();
+        setPlayersQuantity();
         pane.setHgap(50);
-        mainLogo.AddToPane(pane);
-        pane.getChildren().addAll(PlayerChoisePane);
+        mainLogo.addToPane(pane);
+        pane.getChildren().addAll(playerChoisePane);
     }
 
-    private void SetPlayersQuantity()
+    private void setPlayersQuantity()
     {
-        playersQuantity.SetFont(pacManFont);
-        playersQuantity.SetColor(Color.WHITE);
+        playersQuantity.setFont(pacManFont);
+        playersQuantity.setColor(Color.WHITE);
     }
 }

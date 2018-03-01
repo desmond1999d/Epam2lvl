@@ -10,84 +10,60 @@ import java.awt.*;
 
 public class RecordPanel {
 
-    private Label OneUp;
-    private Label HighScore;
-    private Label TwoUp;
-    private Label OneUpValue;
-    private Label TwoUpValue;
-    private Label HighScoreValue;
+    private Label oneUp;
+    private Label highScore;
+    private Label twoUp;
+    private Label oneUpValue;
+    private Label twoUpValue;
+    private Label highScoreValue;
 
     public RecordPanel() {
-        OneUp = new Label("1UP");
-        HighScore = new Label("HIGH-SCORE");
-        TwoUp = new Label("2UP");
-        OneUpValue = new Label("00");
-        HighScoreValue = new Label("00");
-        TwoUpValue = new Label("00");
+        oneUp = new Label("1UP");
+        highScore = new Label("HIGH-SCORE");
+        twoUp = new Label("2UP");
+        oneUpValue = new Label("00");
+        highScoreValue = new Label("00");
+        twoUpValue = new Label("00");
         Font pacManFont = Font.loadFont(getClass()
                 .getResourceAsStream("Joystix.TTF"), 30);
-        SetColor();
-        SetFont(pacManFont);
+        setColor();
+        setFont(pacManFont);
     }
 
-    public void SetFont(Font font)
+    public void setFont(Font font)
     {
-        OneUp.setFont(font);
-        HighScore.setFont(font);
-        TwoUp.setFont(font);
-        OneUpValue.setFont(font);
-        TwoUpValue.setFont(font);
-        HighScoreValue.setFont(font);
+        oneUp.setFont(font);
+        highScore.setFont(font);
+        twoUp.setFont(font);
+        oneUpValue.setFont(font);
+        twoUpValue.setFont(font);
+        highScoreValue.setFont(font);
     }
 
-    public void SetColor()
+    public void setColor()
     {
-        OneUp.setTextFill(Color.RED);
-        HighScore.setTextFill(Color.RED);
-        TwoUp.setTextFill(Color.RED);
-        OneUpValue.setTextFill(Color.WHITE);
-        TwoUpValue.setTextFill(Color.WHITE);
-        HighScoreValue.setTextFill(Color.WHITE);
+        oneUp.setTextFill(Color.RED);
+        highScore.setTextFill(Color.RED);
+        twoUp.setTextFill(Color.RED);
+        oneUpValue.setTextFill(Color.WHITE);
+        twoUpValue.setTextFill(Color.WHITE);
+        highScoreValue.setTextFill(Color.WHITE);
     }
 
-    public void AddToGrid(GridPane pane, int oneUpX, int oneUpY, int highScoreX, int highScoreY, int twoUpX, int twoUpY)
+    public void addToGrid(GridPane pane, int oneUpX, int oneUpY, int highScoreX, int highScoreY, int twoUpX, int twoUpY)
     {
-        GridPane.setHalignment(OneUp, HPos.CENTER);
-        GridPane.setHalignment(HighScore, HPos.CENTER);
-        GridPane.setHalignment(TwoUp, HPos.CENTER);
-        GridPane.setHalignment(OneUpValue, HPos.CENTER);
-        GridPane.setHalignment(HighScoreValue, HPos.CENTER);
-        GridPane.setHalignment(TwoUpValue, HPos.CENTER);
-        pane.setConstraints(OneUp, oneUpX, oneUpY);
-        pane.setConstraints(HighScore, highScoreX, highScoreY);
-        pane.setConstraints(TwoUp, twoUpX, twoUpY);
-        pane.setConstraints(OneUpValue, oneUpX, oneUpY+1);
-        pane.setConstraints(HighScoreValue, highScoreX, highScoreY+1);
-        pane.setConstraints(TwoUpValue, twoUpX, twoUpY+1);
-        pane.getChildren().addAll(OneUp, HighScore, TwoUp, OneUpValue, HighScoreValue, TwoUpValue);
-    }
-
-    public Label GetTwoUp(){
-        return TwoUp;
-    }
-
-    public Label GetOneUp(){
-        return OneUp;
-    }
-
-    public Label GetHighscore(){
-        return HighScore;
-    }
-
-    public Label GetOneUpValue(){
-        return OneUpValue;
-    }
-
-    public Label GetTwoUpValue(){
-        return TwoUpValue;
-    }
-
-    public Label GetHighscoreValue(){
-        return HighScoreValue;
+        GridPane.setHalignment(oneUp, HPos.CENTER);
+        GridPane.setHalignment(highScore, HPos.CENTER);
+        GridPane.setHalignment(twoUp, HPos.CENTER);
+        GridPane.setHalignment(oneUpValue, HPos.CENTER);
+        GridPane.setHalignment(highScoreValue, HPos.CENTER);
+        GridPane.setHalignment(twoUpValue, HPos.CENTER);
+        pane.setConstraints(oneUp, oneUpX, oneUpY);
+        pane.setConstraints(highScore, highScoreX, highScoreY);
+        pane.setConstraints(twoUp, twoUpX, twoUpY);
+        pane.setConstraints(oneUpValue, oneUpX, oneUpY+1);
+        pane.setConstraints(highScoreValue, highScoreX, highScoreY+1);
+        pane.setConstraints(twoUpValue, twoUpX, twoUpY+1);
+        pane.getChildren().addAll(oneUp, highScore, twoUp, oneUpValue, highScoreValue, twoUpValue);
     }
 }

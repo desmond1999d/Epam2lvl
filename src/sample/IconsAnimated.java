@@ -13,42 +13,43 @@ import javafx.util.Duration;
 
 public class IconsAnimated extends Pane {
 
-    private int Columns  =   3;
-    private int Count    =  3;
-    private int Offset_x =  0;
-    private int Offset_y =  0;
-    private int Width    = 20;
-    private int Height   = 20;
+    private int columns  =   3;
+    private int count    =  3;
+    private int offset_x =  0;
+    private int offset_y =  0;
+    private int width    = 20;
+    private int height   = 20;
     private SpriteAnimation animation;
     private ImageView imageView = null;
 
+    /**Constructor - creating a new object.*/
     public IconsAnimated(ImageView img, int Col, int Cou, int Offx, int Offy, int Wid, int Hei) {
         imageView = img;
-        Columns = Col;
-        Count = Cou;
-        Offset_x = Offx;
-        Offset_y = Offy;
-        Width = Wid;
-        Height = Hei;
-        imageView.setViewport(new Rectangle2D(Offset_x, Offset_y, Width, Height));
+        columns = Col;
+        count = Cou;
+        offset_x = Offx;
+        offset_y = Offy;
+        width = Wid;
+        height = Hei;
+        imageView.setViewport(new Rectangle2D(offset_x, offset_y, width, height));
         animation = new SpriteAnimation(
                 imageView,
                 Duration.millis(600),
-                Count, Columns,
-                Offset_x, Offset_y,
-                Width, Height
+                count, columns,
+                offset_x, offset_y,
+                width, height
         );
         getChildren().addAll(imageView);
         animation.setCycleCount(Animation.INDEFINITE);
         animation.play();
     }
 
-    public void SetDirectionInfo(int offX, int offY)
+    public void setDirectionInfo(int offX, int offY)
     {
-        animation.SetDir(offX, offY);
+        animation.setDir(offX, offY);
     }
 
-    public void GoLeft ()
+    public void goLeft ()
     {
         this.setTranslateX(this.getTranslateX() - 1);
     }
