@@ -1,14 +1,9 @@
 package sample;
 
 import javafx.animation.Animation;
-import javafx.application.Application;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.Group;
-import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class IconsAnimated extends Pane {
@@ -23,14 +18,15 @@ public class IconsAnimated extends Pane {
     private ImageView imageView = null;
 
     /**Constructor - creating a new object.*/
-    public IconsAnimated(ImageView img, int Col, int Cou, int Offx, int Offy, int Wid, int Hei) {
+    public IconsAnimated(final ImageView img, final int col, final int cou,
+                         final int offx, final int offy, final int wid, final int hei) {
         imageView = img;
-        columns = Col;
-        count = Cou;
-        offset_x = Offx;
-        offset_y = Offy;
-        width = Wid;
-        height = Hei;
+        columns = col;
+        count = cou;
+        offset_x = offx;
+        offset_y = offy;
+        width = wid;
+        height = hei;
         imageView.setViewport(new Rectangle2D(offset_x, offset_y, width, height));
         animation = new SpriteAnimation(
                 imageView,
@@ -44,13 +40,11 @@ public class IconsAnimated extends Pane {
         animation.play();
     }
 
-    public void setDirectionInfo(int offX, int offY)
-    {
+    public void setDirectionInfo(final int offX, final int offY) {
         animation.setDir(offX, offY);
     }
 
-    public void goLeft ()
-    {
+    public void goLeft () {
         this.setTranslateX(this.getTranslateX() - 1);
     }
 }

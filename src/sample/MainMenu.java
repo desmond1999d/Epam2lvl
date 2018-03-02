@@ -24,8 +24,7 @@ public class MainMenu extends Scene {
     private boolean onePlayerChosen;
     private boolean twoPlayersChosen;
 
-    public MainMenu(GridPane constructorPane, Stage stage)
-    {
+    public MainMenu(final GridPane constructorPane, final Stage stage) {
         super(constructorPane);
         pane = constructorPane;
         primaryStage = stage;
@@ -38,8 +37,7 @@ public class MainMenu extends Scene {
         setActions();
     }
 
-    private void setActions()
-    {
+    private void setActions() {
         setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.UP)
             {
@@ -57,23 +55,21 @@ public class MainMenu extends Scene {
             }
             else if (event.getCode() == KeyCode.ENTER)
             {
-                if (onePlayerChosen == true)
+                if (onePlayerChosen)
                     primaryStage.setScene(new MapScene(new Pane(), primaryStage));
-                else if (twoPlayersChosen == true)
+                else if (twoPlayersChosen)
                     primaryStage.setScene(new MapScene(new Pane(), primaryStage));
             }
         });
     }
 
-    private void setRecordPanel()
-    {
+    private void setRecordPanel() {
         recordPanel.setFont(pacManFont);
         recordPanel.setColor();
         recordPanel.addToGrid(pane, 0, 0, 1, 0, 2, 0);
     }
 
-    private void getItTogether()
-    {
+    private void getItTogether() {
         ColumnConstraints columnConstraints = new ColumnConstraints();
         pane.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
         Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
@@ -91,8 +87,7 @@ public class MainMenu extends Scene {
         pane.getChildren().addAll(playerChoisePane);
     }
 
-    private void setPlayersQuantity()
-    {
+    private void setPlayersQuantity() {
         playersQuantity.setFont(pacManFont);
         playersQuantity.setColor(Color.WHITE);
     }

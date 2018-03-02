@@ -30,8 +30,7 @@ public class RecordPanel {
         setFont(pacManFont);
     }
 
-    public void setFont(Font font)
-    {
+    public void setFont(final Font font) {
         oneUp.setFont(font);
         highScore.setFont(font);
         twoUp.setFont(font);
@@ -40,8 +39,7 @@ public class RecordPanel {
         highScoreValue.setFont(font);
     }
 
-    public void setColor()
-    {
+    public void setColor() {
         oneUp.setTextFill(Color.RED);
         highScore.setTextFill(Color.RED);
         twoUp.setTextFill(Color.RED);
@@ -50,8 +48,8 @@ public class RecordPanel {
         highScoreValue.setTextFill(Color.WHITE);
     }
 
-    public void addToGrid(GridPane pane, int oneUpX, int oneUpY, int highScoreX, int highScoreY, int twoUpX, int twoUpY)
-    {
+    public void addToGrid(final GridPane pane, final int oneUpX, final int oneUpY,
+                          final int highScoreX, final int highScoreY, final int twoUpX, final int twoUpY) {
         GridPane.setHalignment(oneUp, HPos.CENTER);
         GridPane.setHalignment(highScore, HPos.CENTER);
         GridPane.setHalignment(twoUp, HPos.CENTER);

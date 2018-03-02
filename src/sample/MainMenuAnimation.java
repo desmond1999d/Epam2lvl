@@ -10,8 +10,7 @@ public class MainMenuAnimation {
     private HorizontalAnimationControl animationControl3;
     private HorizontalAnimationControl animationControl4;
 
-    public MainMenuAnimation(Pane pane, int posY)
-    {
+    public MainMenuAnimation(final Pane pane,final int posY) {
         animationControl1 = new HorizontalAnimationControl(3, 3, 0, 0, 20, 20);
         animationControl2 = new HorizontalAnimationControl(2, 2, 80, 80, 20, 20);
         animationControl3 = new HorizontalAnimationControl(2, 2, 80, 100, 20, 20);
@@ -20,8 +19,7 @@ public class MainMenuAnimation {
         activate(pane);
     }
 
-    private void set(int posY)
-    {
+    private void set(final int posY) {
         double screenWidth = Screen.getPrimary().getVisualBounds().getWidth();
         animationControl1.iconSetTranslateX(screenWidth+100);
         animationControl2.iconSetTranslateX(screenWidth+200);
@@ -33,8 +31,7 @@ public class MainMenuAnimation {
         animationControl4.iconSetTranslateY(posY);
     }
 
-    private void activate(Pane pane)
-    {
+    private void activate(final Pane pane) {
         animationControl1.launch(pane);
         animationControl2.launch(pane);
         animationControl3.launch(pane);

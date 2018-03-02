@@ -17,14 +17,12 @@ public class PlayersQuantity {
     private Stage primaryStage;
     private StackPane playerChoisePane;
 
-    public PlayersQuantity(StackPane pane, Stage stage)
-    {
+    public PlayersQuantity(final StackPane pane, final Stage stage) {
         primaryStage = stage;
         playerChoisePane = pane;
         onePlayer = new Label("1 PLAYER");
         twoPlayers = new Label("2 PLAYERS");
-        Image ChoiseImage = new Image("sample/Original_PacMan.png");
-        choiseSymbol = new ImageView(ChoiseImage);
+        choiseSymbol = new ImageView(new Image("sample/Original_PacMan.png"));
         choiseSymbolSettings();
         setActions();
         setAlligment(pane);
@@ -35,42 +33,35 @@ public class PlayersQuantity {
      * @param font - font for labels
      * @return - nothing
      */
-    public void setFont(Font font)
-    {
+    public void setFont(final Font font) {
         onePlayer.setFont(font);
         twoPlayers.setFont(font);
     }
 
-    public void setColor(Color color)
-    {
+    public void setColor(final Color color) {
         onePlayer.setTextFill(color);
         twoPlayers.setTextFill(color);
     }
 
-    public void onePlayerChosen()
-    {
+    public void onePlayerChosen() {
         onePlayer.setTextFill(Color.RED);
         playerChoisePane.setAlignment(choiseSymbol, Pos.CENTER_LEFT);
     }
 
-    public void twoPlayersChosen()
-    {
+    public void twoPlayersChosen() {
         twoPlayers.setTextFill(Color.RED);
         playerChoisePane.setAlignment(choiseSymbol, Pos.BOTTOM_LEFT);
     }
 
-    public void onePlayerNotChosen()
-    {
+    public void onePlayerNotChosen() {
         onePlayer.setTextFill(Color.WHITE);
     }
 
-    public void twoPlayersNotChosen()
-    {
+    public void twoPlayersNotChosen() {
         twoPlayers.setTextFill(Color.WHITE);
     }
 
-    public void setActions()
-    {
+    public void setActions() {
         onePlayer.setOnMouseEntered(event ->
                 {
                     onePlayerChosen();
@@ -103,15 +94,13 @@ public class PlayersQuantity {
         );
     }
 
-    public void setAlligment(StackPane playerChoisePane)
-    {
+    public void setAlligment(final StackPane playerChoisePane) {
         playerChoisePane.setAlignment(onePlayer, Pos.CENTER);
         playerChoisePane.setAlignment(twoPlayers, Pos.BOTTOM_CENTER);
         playerChoisePane.setAlignment(choiseSymbol, Pos.CENTER_LEFT);
     }
 
-    public void choiseSymbolSettings()
-    {
+    public void choiseSymbolSettings() {
         choiseSymbol.setFitWidth(30);
         choiseSymbol.setFitHeight(30);
         choiseSymbol.setRotate(choiseSymbol.getRotate() + 180);

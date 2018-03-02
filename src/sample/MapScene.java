@@ -20,7 +20,7 @@ class MapScene extends Scene {
     private Stage primaryStage;
     private MainMenuAnimation animation;
 
-    public MapScene(Pane pane, Stage stage){
+    public MapScene(final Pane pane, final Stage stage){
         super(pane);
         recordPanel = new RecordPanel();
         mainPane = pane;

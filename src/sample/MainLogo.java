@@ -11,8 +11,7 @@ public class MainLogo {
     private ImageView pacManLogo;
     private VBox logoBox;
 
-    public MainLogo()
-    {
+    public MainLogo() {
         logoImage = new Image("sample/Pacman_logo.png");
         pacManLogo = new ImageView(logoImage);
         logoBox = new VBox();
@@ -23,8 +22,7 @@ public class MainLogo {
         logoBox.setAlignment(Pos.BOTTOM_CENTER);
     }
 
-    public void addToPane(GridPane pane)
-    {
+    public void addToPane(final GridPane pane) {
         pane.setConstraints(logoBox, 1, 2);
         pane.getChildren().addAll(logoBox);
     }
