@@ -1,5 +1,6 @@
 package sample;
 
+import Constants.ConstantClass;
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -11,19 +12,29 @@ public class MainLogo {
     private ImageView pacManLogo;
     private VBox logoBox;
 
+    /**
+     * Constructor
+     * Sets the main logo image ond position
+     */
+
     public MainLogo() {
         logoImage = new Image("sample/Pacman_logo.png");
         pacManLogo = new ImageView(logoImage);
         logoBox = new VBox();
-        logoBox.setMinHeight(250);
-        pacManLogo.setScaleX(1.2);
-        pacManLogo.setScaleY(1.2);
+        logoBox.setMinHeight(ConstantClass.MAINLOGOMINHEIGHT);
+        pacManLogo.setScaleX(ConstantClass.MAINLOGOSCALE);
+        pacManLogo.setScaleY(ConstantClass.MAINLOGOSCALE);
         logoBox.getChildren().addAll(pacManLogo);
         logoBox.setAlignment(Pos.BOTTOM_CENTER);
     }
 
+    /**
+     * Adds main logo to the pane
+     * @param pane where to add
+     */
+
     public void addToPane(final GridPane pane) {
-        pane.setConstraints(logoBox, 1, 2);
+        pane.setConstraints(logoBox, ConstantClass.MAINLOGOCOLUMN, ConstantClass.MAINLOGORAW);
         pane.getChildren().addAll(logoBox);
     }
 }

@@ -6,6 +6,10 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 
+/**
+ * class that changes sprites once per frame.
+ */
+
 public class SpriteAnimation extends Transition {
 
     private final ImageView imageView;
@@ -17,6 +21,18 @@ public class SpriteAnimation extends Transition {
     private final int height;
 
     private int lastIndex;
+
+    /**
+     * Constructor
+     * @param imageView sprite sheet
+     * @param duration obvious
+     * @param count quantity of sprites
+     * @param columns quantity of columns
+     * @param offsetX x offset on the spite sheet
+     * @param offsetY y offset on the spite sheet
+     * @param width width of an animation unit
+     * @param height height of an animation unit
+     */
 
     public SpriteAnimation(
             final ImageView imageView,
@@ -39,6 +55,11 @@ public class SpriteAnimation extends Transition {
         this.offsetX = newOffX;
         this.offsetY = newOffY;
     }
+
+    /**
+     * switches sprites
+     * @param k obvious
+     */
 
     protected void interpolate(final double k) {
         final int index = Math.min((int) Math.floor(k * count), count - 1);

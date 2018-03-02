@@ -8,6 +8,10 @@ import javafx.scene.text.Font;
 
 import java.awt.*;
 
+/**
+ * sets the style of a record panel
+ */
+
 public class RecordPanel {
 
     private Label oneUp;
@@ -16,6 +20,10 @@ public class RecordPanel {
     private Label oneUpValue;
     private Label twoUpValue;
     private Label highScoreValue;
+
+    /**
+     * constructor
+     */
 
     public RecordPanel() {
         oneUp = new Label("1UP");
@@ -30,6 +38,11 @@ public class RecordPanel {
         setFont(pacManFont);
     }
 
+    /**
+     * sets the font of the labels
+     * @param font obvious
+     */
+
     public void setFont(final Font font) {
         oneUp.setFont(font);
         highScore.setFont(font);
@@ -39,6 +52,10 @@ public class RecordPanel {
         highScoreValue.setFont(font);
     }
 
+    /**
+     * set the color of labels
+     */
+
     public void setColor() {
         oneUp.setTextFill(Color.RED);
         highScore.setTextFill(Color.RED);
@@ -47,6 +64,17 @@ public class RecordPanel {
         twoUpValue.setTextFill(Color.WHITE);
         highScoreValue.setTextFill(Color.WHITE);
     }
+
+    /**
+     * adds labels to GridPane
+     * @param pane where to add
+     * @param oneUpX obvious
+     * @param oneUpY obvious
+     * @param highScoreX obvious
+     * @param highScoreY obvious
+     * @param twoUpX obvious
+     * @param twoUpY obvious
+     */
 
     public void addToGrid(final GridPane pane, final int oneUpX, final int oneUpY,
                           final int highScoreX, final int highScoreY, final int twoUpX, final int twoUpY) {

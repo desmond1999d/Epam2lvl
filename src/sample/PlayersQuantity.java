@@ -10,6 +10,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
+/**
+ * the interface of choise of palyers quantity.
+ */
+
 public class PlayersQuantity {
     private Label onePlayer;
     private Label twoPlayers;
@@ -38,28 +42,53 @@ public class PlayersQuantity {
         twoPlayers.setFont(font);
     }
 
+    /** set color
+     * @param color - color for labels
+     * @return - nothing
+     */
+
     public void setColor(final Color color) {
         onePlayer.setTextFill(color);
         twoPlayers.setTextFill(color);
     }
+
+    /**
+     * highlightion for one player label
+     */
 
     public void onePlayerChosen() {
         onePlayer.setTextFill(Color.RED);
         playerChoisePane.setAlignment(choiseSymbol, Pos.CENTER_LEFT);
     }
 
+    /**
+     * highlightion for two players label
+     */
+
     public void twoPlayersChosen() {
         twoPlayers.setTextFill(Color.RED);
         playerChoisePane.setAlignment(choiseSymbol, Pos.BOTTOM_LEFT);
     }
 
+    /**
+     * return back from the highlightion state for one player label
+     */
+
     public void onePlayerNotChosen() {
         onePlayer.setTextFill(Color.WHITE);
     }
 
+    /**
+     * return back from the highlightion state for two players label
+     */
+
     public void twoPlayersNotChosen() {
         twoPlayers.setTextFill(Color.WHITE);
     }
+
+    /**
+     * set envents for the labels
+     */
 
     public void setActions() {
         onePlayer.setOnMouseEntered(event ->
@@ -94,11 +123,20 @@ public class PlayersQuantity {
         );
     }
 
+    /**
+     * sets the position of the labels
+     * @param playerChoisePane the place, where labels are put
+     */
+
     public void setAlligment(final StackPane playerChoisePane) {
         playerChoisePane.setAlignment(onePlayer, Pos.CENTER);
         playerChoisePane.setAlignment(twoPlayers, Pos.BOTTOM_CENTER);
         playerChoisePane.setAlignment(choiseSymbol, Pos.CENTER_LEFT);
     }
+
+    /**
+     * settings of a little icon on the left of the labels
+     */
 
     public void choiseSymbolSettings() {
         choiseSymbol.setFitWidth(30);

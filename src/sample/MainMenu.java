@@ -1,5 +1,6 @@
 package sample;
 
+import Constants.ConstantClass;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Rectangle2D;
@@ -24,6 +25,12 @@ public class MainMenu extends Scene {
     private boolean onePlayerChosen;
     private boolean twoPlayersChosen;
 
+    /**
+     * Constructor
+     * @param constructorPane pane for the scene constructor
+     * @param stage primaryStage itself
+     */
+
     public MainMenu(final GridPane constructorPane, final Stage stage) {
         super(constructorPane);
         pane = constructorPane;
@@ -32,10 +39,14 @@ public class MainMenu extends Scene {
         playerChoisePane = new StackPane();
         recordPanel = new RecordPanel();
         playersQuantity = new PlayersQuantity(playerChoisePane, primaryStage);
-        anim = new MainMenuAnimation(pane, 500);
+        anim = new MainMenuAnimation(pane, ConstantClass.SCENEANIMPOSY);
         getItTogether();
         setActions();
     }
+
+    /**
+     * Sets the events for players quantity choise
+     */
 
     private void setActions() {
         setOnKeyPressed(event -> {
@@ -63,17 +74,26 @@ public class MainMenu extends Scene {
         });
     }
 
+    /**
+     * sets the style to the record panel and adds it to the
+     * GridPane
+     */
+
     private void setRecordPanel() {
         recordPanel.setFont(pacManFont);
         recordPanel.setColor();
         recordPanel.addToGrid(pane, 0, 0, 1, 0, 2, 0);
     }
 
+    /**
+     * adds all the elements to the main menu
+     */
+
     private void getItTogether() {
         ColumnConstraints columnConstraints = new ColumnConstraints();
         pane.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
         Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
-        columnConstraints.setPrefWidth(primaryScreenBounds.getWidth()/3);
+        columnConstraints.setPrefWidth(primaryScreenBounds.getWidth()/ 3);
         pane.getColumnConstraints().addAll(columnConstraints, columnConstraints, columnConstraints);
         pacManFont = Font.loadFont(getClass()
                 .getResourceAsStream("Joystix.TTF"), 30);
@@ -86,6 +106,10 @@ public class MainMenu extends Scene {
         mainLogo.addToPane(pane);
         pane.getChildren().addAll(playerChoisePane);
     }
+
+    /**
+     * Sets the style of PlayersQuantity info
+     */
 
     private void setPlayersQuantity() {
         playersQuantity.setFont(pacManFont);

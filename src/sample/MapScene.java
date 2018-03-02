@@ -11,6 +11,10 @@ import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
+/**
+ * class that constructs scene, where main gameplay will take place.
+ */
+
 class MapScene extends Scene {
 
     private Pane mainPane;
@@ -19,6 +23,12 @@ class MapScene extends Scene {
     private Rectangle2D primaryScreenBounds;
     private Stage primaryStage;
     private MainMenuAnimation animation;
+
+    /**
+     * Constructor
+     * @param pane required for scene constructor
+     * @param stage primaryStage itself
+     */
 
     public MapScene(final Pane pane, final Stage stage){
         super(pane);
@@ -37,6 +47,10 @@ class MapScene extends Scene {
         });
     }
 
+    /**
+     * adds map to the scene
+     */
+
     public void buildMap() {
         mainPane.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
         final int x = 322;
@@ -49,7 +63,9 @@ class MapScene extends Scene {
         mainPane.getChildren().addAll(imageView);
     }
 
-
+    /**
+     * sets the reocrd menu
+     */
 
     public void buildRecordPanel() {
         GridPane gridPane = new GridPane();

@@ -6,10 +6,14 @@ import javafx.scene.layout.*;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
+/**
+ * This is the main class that preloads first scene
+ */
+
 public class Main extends Application {
 
     @Override
-    public void start(Stage primaryStage) throws Exception{
+    public void start(final Stage primaryStage) throws Exception{
         primaryStage.setTitle("Tests");
         Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
         MainMenu mainMenu = new MainMenu(new GridPane(), primaryStage);
@@ -20,6 +24,11 @@ public class Main extends Application {
         primaryStage.setScene(mainMenu);
         primaryStage.show();
     }
+
+    /**
+     * auto-generted method
+     * @param args
+     */
 
     public static void main(final String[] args) {
         launch(args);
