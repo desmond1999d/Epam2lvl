@@ -3,6 +3,7 @@ package sample;
 import Constants.ConstantClass;
 import javafx.animation.Animation;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
@@ -50,14 +51,39 @@ public class IconsAnimated extends Pane {
         animation.play();
     }
 
+    public IconsAnimated() {
+        imageView = new ImageView(new Image("sample/Pacman10-hp-sprite.png"));
+        imageView.setScaleX(ConstantClass.ANIMATIONUNITSCALE);
+        imageView.setScaleY(ConstantClass.ANIMATIONUNITSCALE);
+        columns = 3;
+        count = 3;
+        offset_x = 0;
+        offset_y = 0;
+        width = 20;
+        height = 20;
+        imageView.setViewport(new Rectangle2D(offset_x, offset_y, width, height));
+        animation = new SpriteAnimation(
+                imageView,
+                Duration.millis(ConstantClass.ANIMATIONDURATIONMS),
+                count, columns,
+                offset_x, offset_y,
+                width, height
+        );
+        getChildren().addAll(imageView);
+        animation.setCycleCount(Animation.INDEFINITE);
+        animation.play();
+    }
+
     /**
      * sets the spawn point of an animation unit
-     * @param offX X position
-     * @param offY Y position
+     * @param columns
+     * @param count
+     * @param offsetX X position
+     * @param offsetY Y position
      */
 
-    public void setDirectionInfo(final int offX, final int offY) {
-        animation.setDir(offX, offY);
+    public void setSprite(final int count, final int columns, final int offsetX, final int offsetY) {
+        animation.setDir(count, columns, offsetX, offsetY);
     }
 
     /**
@@ -66,5 +92,17 @@ public class IconsAnimated extends Pane {
 
     public void goLeft() {
         this.setTranslateX(this.getTranslateX() - 1);
+    }
+
+    public void goRight() {
+        this.setTranslateX(this.getTranslateX() + 1);
+    }
+
+    public void goUp() {
+        this.setTranslateY(this.getTranslateY() - 1);
+    }
+
+    public void goDown() {
+        this.setTranslateY(this.getTranslateY() + 1);
     }
 }

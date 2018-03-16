@@ -11,6 +11,8 @@ import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
+import java.io.Console;
+
 /**
  * class that constructs scene, where main gameplay will take place.
  */
@@ -23,6 +25,7 @@ class MapScene extends Scene {
     private Rectangle2D primaryScreenBounds;
     private Stage primaryStage;
     private MainMenuAnimation animation;
+    private Player player;
 
     /**
      * Constructor
@@ -39,11 +42,29 @@ class MapScene extends Scene {
         imageView = new ImageView(image);
         animation = new MainMenuAnimation(mainPane, 550);
         primaryScreenBounds = Screen.getPrimary().getVisualBounds();
+        player = new Player();
+        setEvents();
         buildMap();
         buildRecordPanel();
+    }
+
+    private void setEvents() {
         setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.ESCAPE)
+            if (event.getCode() == KeyCode.ESCAPE) {
                 primaryStage.setScene(new MainMenu(new GridPane(), primaryStage));
+            }
+            else if (event.getCode() == KeyCode.W) {
+                player.changeDir(direction.UP);
+            }
+            else if (event.getCode() == KeyCode.S) {
+                player.changeDir(direction.DOWN);
+            }
+            else if (event.getCode() == KeyCode.D) {
+                player.changeDir(direction.RIGHT);
+            }
+            else if (event.getCode() == KeyCode.A) {
+                player.changeDir(direction.LEFT);
+            }
         });
     }
 
@@ -60,7 +81,9 @@ class MapScene extends Scene {
         imageView.setFitHeight(400);
         imageView.setFitWidth(primaryScreenBounds.getWidth()+85);
         imageView.setViewport(new Rectangle2D(x, y, width, height));
-        mainPane.getChildren().addAll(imageView);
+        player.setTranslateX(500);
+        player.setTranslateY(500);
+        mainPane.getChildren().addAll(imageView, player);
     }
 
     /**

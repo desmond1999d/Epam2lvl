@@ -3,7 +3,7 @@ package Constants;
 public class ConstantClass {
     public static final int LEFTBORDEROFFSET = -20;
     public static final int RIGHTBORDEROFFSET = 100;
-    public static final int ANIMATIONUNITSCALE = 2;
+    public static final double ANIMATIONUNITSCALE = 2.5;
     public static final int ANIMATIONDURATIONMS = 600;
     public static final double MAINLOGOSCALE = 1.2;
     public static final int MAINLOGOMINHEIGHT = 250;

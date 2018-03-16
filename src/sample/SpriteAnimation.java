@@ -12,13 +12,13 @@ import javafx.util.Duration;
 
 public class SpriteAnimation extends Transition {
 
-    private final ImageView imageView;
-    private final int count;
-    private final int columns;
+    private ImageView imageView;
+    private int count;
+    private int columns;
     private int offsetX;
     private int offsetY;
-    private final int width;
-    private final int height;
+    private int width;
+    private int height;
 
     private int lastIndex;
 
@@ -51,9 +51,11 @@ public class SpriteAnimation extends Transition {
         setInterpolator(Interpolator.LINEAR);
     }
 
-    public void setDir(final int newOffX, final int newOffY) {
+    public void setDir(final int newCount, final int newColumns, final int newOffX, final int newOffY) {
         this.offsetX = newOffX;
         this.offsetY = newOffY;
+        columns = newColumns;
+        count = newCount;
     }
 
     /**
