@@ -81,8 +81,6 @@ class MapScene extends Scene {
         imageView.setFitHeight(400);
         imageView.setFitWidth(primaryScreenBounds.getWidth()+85);
         imageView.setViewport(new Rectangle2D(x, y, width, height));
-        player.setTranslateX(500);
-        player.setTranslateY(500);
         mainPane.getChildren().addAll(imageView, player);
     }
 
