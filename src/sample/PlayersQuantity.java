@@ -26,7 +26,7 @@ public class PlayersQuantity {
         playerChoisePane = pane;
         onePlayer = new Label("1 PLAYER");
         twoPlayers = new Label("2 PLAYERS");
-        choiseSymbol = new ImageView(new Image("sample/Original_PacMan.png"));
+        choiseSymbol = new ImageView(new Image("Sprites/Original_PacMan.png"));
         choiseSymbolSettings();
         setActions();
         setAlligment(pane);

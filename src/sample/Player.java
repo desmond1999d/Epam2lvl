@@ -1,8 +1,6 @@
 package sample;
 
 import javafx.animation.AnimationTimer;
-import javafx.scene.image.PixelReader;
-import javafx.scene.input.KeyCode;
 
 enum direction
 {
@@ -16,10 +14,31 @@ enum direction
 public class Player extends IconsAnimated {
 
     private direction dir;
+    private direction prevDir;
     private int posOnMapX;
     private int posOnMapY;
-    private double wentX;
-    private double wentY;
+    private int wentX;
+    private int wentY;
+    private final int dist = Map.blockSize;
+    private final int wentBorderPos = 25;
+    private final int wentBorderNeg = -25;
+    //private final int wentBorder = 5;
+
+//    public int getWentBorder() {
+//        return wentBorder;
+//    }
+//
+//    public direction getDir() {
+//        return dir;
+//    }
+//
+//    public int getWentX() {
+//        return wentX;
+//    }
+//
+//    public int getWentY() {
+//        return wentY;
+//    }
 
     public Player() {
         final AnimationTimer timer = new AnimationTimer() {
@@ -32,10 +51,11 @@ public class Player extends IconsAnimated {
         dir = direction.STABLE;
         posOnMapX = 1;
         posOnMapY = 1;
-        setTranslateX(40);
-        setTranslateY(33);
+        setTranslateX(41);
+        setTranslateY(42);
         wentX = 0;
         wentY = 0;
+        prevDir = dir;
     }
 
     public void changeDir(direction i)
@@ -49,82 +69,269 @@ public class Player extends IconsAnimated {
         dir = i;
     }
 
-    @Override
-    public void goLeft() {
-        this.setTranslateX(this.getTranslateX() - 1);
-        wentX -= 1;
-        if (wentX <= -32) {
-            posOnMapX--;
-            System.out.println("X: " + posOnMapX);
-            System.out.println("Y: " + posOnMapY);
-            wentX = 0;
-        }
-    }
-    @Override
-    public void goRight() {
-        this.setTranslateX(this.getTranslateX() + 1);
-        wentX += 1;
-        if (wentX >= 32) {
-            posOnMapX++;
-            System.out.println("X: " + posOnMapX);
-            System.out.println("Y: " + posOnMapY);
-            wentX = 0;
-        }
-    }
-    @Override
-    public void goUp() {
-        this.setTranslateY(this.getTranslateY() - 1);
-        wentY -= 1;
-        System.out.println("wentY: " + wentY);
-        if (wentY <= -21) {
-            posOnMapY--;
-            System.out.println("X: " + posOnMapX);
-            System.out.println("Y: " + posOnMapY);
-            wentY = 0;
-        }
-    }
-    @Override
-    public void goDown() {
-        this.setTranslateY(this.getTranslateY() + 1);
-        wentY += 1;
-        System.out.println("wentY: " + wentY);
-        if (wentY >= 21) {
-            posOnMapY++;
-            System.out.println("X: " + posOnMapX);
-            System.out.println("Y: " + posOnMapY);
-            wentY = 0;
+    public void update() {
+        switch (dir) {
+            case UP:
+                if (Map.map[posOnMapY - 1].charAt(posOnMapX) == '0') {
+                    goUp();
+                    wentY--;
+                    if (Math.abs(wentY) >= dist) {
+                        posOnMapY--;
+                        System.out.println("X: " + posOnMapX + "\nY: " + posOnMapY);
+                        wentY = 0;
+                    }
+                }
+                else {
+                    //Поворот справа
+                    if (wentX <= wentBorderNeg) {
+                        if (Map.map[posOnMapY - 1].charAt(posOnMapX - 1) == '0') {
+                            //сдвиг в цикле
+                            while (Math.abs(wentX) <= dist) {
+                                goLeft();
+                                wentX--;
+                            }
+                            //изменение координаты
+                            posOnMapX--;
+                            wentX = 0;
+                        }
+                    }
+                    //Поворот слева
+                    else if (wentX >= wentBorderPos) {
+                        if (Map.map[posOnMapY - 1].charAt(posOnMapX + 1) == '0') {
+                            //сдвиг в цикле
+                            while (Math.abs(wentX) <= dist) {
+                                goRight();
+                                wentX++;
+                            }
+                            //изменение координаты
+                            posOnMapX++;
+                            wentX = 0;
+                        }
+                    }
+                }
+                prevDir = dir;
+                break;
+
+
+
+
+
+
+
+
+            case DOWN:
+                if (Map.map[posOnMapY + 1].charAt(posOnMapX) == '0') {
+                    goDown();
+                    wentY++;
+                    if (wentY >= dist) {
+                        posOnMapY++;
+                        System.out.println("X: " + posOnMapX + "\nY: " + posOnMapY);
+                        wentY = 0;
+                    }
+                }
+                else {
+                    //Поворот справа
+                    if (wentX <= wentBorderNeg) {
+                        if (Map.map[posOnMapY + 1].charAt(posOnMapX - 1) == '0') {
+                            //сдвиг в цикле
+                            while (Math.abs(wentX) <= dist) {
+                                goLeft();
+                                wentX--;
+                            }
+                            //изменение координаты
+                            posOnMapX--;
+                            wentX = 0;
+                        }
+                    }
+                    //Поворот слева
+                    else if (wentX >= wentBorderPos) {
+                        if (Map.map[posOnMapY + 1].charAt(posOnMapX + 1) == '0') {
+                            //сдвиг в цикле
+                            while (Math.abs(wentX) <= dist) {
+                                goRight();
+                                wentX++;
+                            }
+                            //изменение координаты
+                            posOnMapX++;
+                            wentX = 0;
+                        }
+                    }
+                }
+                prevDir = dir;
+                break;
+
+
+
+
+
+
+            case LEFT:
+                if (Map.map[posOnMapY].charAt(posOnMapX-1) == '0') {
+                    if (prevDir == direction.LEFT || prevDir == direction.RIGHT) {
+                        wentX--;
+                        goLeft();
+                        if (Math.abs(wentX) >= dist) {
+                            posOnMapX--;
+                            System.out.println("X: " + posOnMapX + "\nY: " + posOnMapY);
+                            wentX = 0;
+                        }
+                    }
+                }
+                //Поворот
+                else {
+                    if (wentY <= wentBorderNeg) {
+                        if (Map.map[posOnMapY-1].charAt(posOnMapX-1) == '0') {
+                            while (Math.abs(wentY) <= dist) {
+                                goUp();
+                                wentY--;
+                            }
+                            posOnMapY--;
+                            wentY = 0;
+                        }
+                    }
+                    else if (wentY >= wentBorderPos) {
+                        if (Map.map[posOnMapY+1].charAt(posOnMapX-1) == '0') {
+                            while (wentY <= dist) {
+                                goDown();
+                                wentY++;
+                            }
+                            posOnMapY++;
+                            wentY = 0;
+                        }
+                    }
+                }
+                prevDir = dir;
+                break;
+
+
+
+
+
+
+
+
+            case RIGHT:
+                if (Map.map[posOnMapY].charAt(posOnMapX+1) == '0') {
+                    if (prevDir == direction.LEFT || prevDir == direction.RIGHT) {
+                        wentX++;
+                        goRight();
+                        if (wentX >= dist) {
+                            posOnMapX++;
+                            System.out.println("X: " + posOnMapX + "\nY: " + posOnMapY);
+                            wentX = 0;
+                        }
+                    }
+                }
+                //Поворот
+                else {
+                    if (wentY <= wentBorderNeg) {
+                        if (Map.map[posOnMapY-1].charAt(posOnMapX+1) == '0') {
+                            while (Math.abs(wentY) < dist) {
+                                goUp();
+                                wentY--;
+                            }
+                            posOnMapY--;
+                            wentY = 0;
+                        }
+                    }
+                    else if (wentY >= wentBorderPos) {
+                        if (Map.map[posOnMapY+1].charAt(posOnMapX+1) == '0') {
+                            while (wentY < dist) {
+                                goDown();
+                                wentY++;
+                            }
+                            posOnMapY++;
+                            wentY = 0;
+                        }
+                    }
+                }
+                prevDir = dir;
+                break;
         }
     }
 
-    public void update() {
-        if (posOnMapX > Map.xSize || posOnMapY > Map.ySize || posOnMapX < 0 || posOnMapY < 0) {
-            return;
-        }
-       switch (dir) {
-           case UP:
-               if (Map.map[posOnMapY-1].charAt(posOnMapX)=='0') {
-                   goUp();
-                   goUp();
-               }
-               break;
-           case DOWN:
-               if (Map.map[posOnMapY+1].charAt(posOnMapX)=='0') {
-                   goDown();
-                   goDown();
-               }
-               break;
-           case LEFT:
-               if (Map.map[posOnMapY].charAt(posOnMapX-1)=='0') {
-                   goLeft();
-                   goLeft();
-               }
-               break;
-           case RIGHT:
-               if (Map.map[posOnMapY].charAt(posOnMapX+1)=='0') {
-                   goRight();
-                   goRight();
-               }
-               break;
-       }
-    }
+//    public void update() {
+//        switch (dir) {
+//            case UP:
+//                if (Map.map[posOnMapY - 1].charAt(posOnMapX) == '0') {
+//                    goUp();
+//                    wentY--;
+//                    if (Math.abs(wentY) >= dist) {
+//                        posOnMapY--;
+//                        System.out.println("X: " + posOnMapX + "\nY: " + posOnMapY);
+//                        wentY = 0;
+//                    }
+//                    goUp();
+//                    wentY--;
+//                    if (Math.abs(wentY) >= dist) {
+//                        posOnMapY--;
+//                        System.out.println("X: " + posOnMapX + "\nY: " + posOnMapY);
+//                        wentY = 0;
+//                    }
+//                }
+//                prevDir = dir;
+//                break;
+//            case DOWN:
+//                if (Map.map[posOnMapY + 1].charAt(posOnMapX) == '0') {
+//                    goDown();
+//                    wentY++;
+//                    if (wentY >= dist) {
+//                        posOnMapY++;
+//                        System.out.println("X: " + posOnMapX + "\nY: " + posOnMapY);
+//                        wentY = 0;
+//                    }
+//                    goDown();
+//                    wentY++;
+//                    if (wentY >= dist) {
+//                        posOnMapY++;
+//                        System.out.println("X: " + posOnMapX + "\nY: " + posOnMapY);
+//                        wentY = 0;
+//                    }
+//                }
+//                prevDir = dir;
+//                break;
+//            case LEFT:
+//                if (Map.map[posOnMapY].charAt(posOnMapX - 1) == '0') {
+//                    if (prevDir == direction.LEFT || prevDir == direction.RIGHT) {
+//                        wentX--;
+//                        goLeft();
+//                        if (Math.abs(wentX) >= dist) {
+//                            posOnMapX--;
+//                            System.out.println("X: " + posOnMapX + "\nY: " + posOnMapY);
+//                            wentX = 0;
+//                        }
+//                        wentX--;
+//                        goLeft();
+//                        if (Math.abs(wentX) >= dist) {
+//                            posOnMapX--;
+//                            System.out.println("X: " + posOnMapX + "\nY: " + posOnMapY);
+//                            wentX = 0;
+//                        }
+//                    }
+//                }
+//                prevDir = dir;
+//                break;
+//            case RIGHT:
+//                if (Map.map[posOnMapY].charAt(posOnMapX + 1) == '0') {
+//                    if (prevDir == direction.LEFT || prevDir == direction.RIGHT) {
+//                        wentX++;
+//                        goRight();
+//                        if (wentX >= dist) {
+//                            posOnMapX++;
+//                            System.out.println("X: " + posOnMapX + "\nY: " + posOnMapY);
+//                            wentX = 0;
+//                        }
+//                        wentX++;
+//                        goRight();
+//                        if (wentX >= dist) {
+//                            posOnMapX++;
+//                            System.out.println("X: " + posOnMapX + "\nY: " + posOnMapY);
+//                            wentX = 0;
+//                        }
+//                    }
+//                }
+//                prevDir = dir;
+//                break;
+//        }
+//    }
 }

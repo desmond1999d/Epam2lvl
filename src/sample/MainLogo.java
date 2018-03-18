@@ -18,7 +18,7 @@ public class MainLogo {
      */
 
     public MainLogo() {
-        logoImage = new Image("sample/Pacman_logo.png");
+        logoImage = new Image("Sprites/Pacman_logo.png");
         pacManLogo = new ImageView(logoImage);
         logoBox = new VBox();
         logoBox.setMinHeight(ConstantClass.MAINLOGOMINHEIGHT);

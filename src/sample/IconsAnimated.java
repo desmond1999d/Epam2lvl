@@ -52,7 +52,7 @@ public class IconsAnimated extends Pane {
     }
 
     public IconsAnimated() {
-        imageView = new ImageView(new Image("sample/Pacman10-hp-sprite.png"));
+        imageView = new ImageView(new Image("Sprites/Pacman10-hp-sprite.png"));
         imageView.setScaleX(ConstantClass.ANIMATIONUNITSCALE);
         imageView.setScaleY(ConstantClass.ANIMATIONUNITSCALE);
         columns = 3;

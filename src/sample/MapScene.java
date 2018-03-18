@@ -20,12 +20,13 @@ import java.io.Console;
 class MapScene extends Scene {
 
     private Pane mainPane;
-    private ImageView imageView;
+    //private ImageView imageView;
     private RecordPanel recordPanel;
     private Rectangle2D primaryScreenBounds;
     private Stage primaryStage;
     private MainMenuAnimation animation;
     private Player player;
+    private Map map;
 
     /**
      * Constructor
@@ -38,8 +39,9 @@ class MapScene extends Scene {
         recordPanel = new RecordPanel();
         mainPane = pane;
         primaryStage = stage;
-        Image image = new Image("sample/Pacman10-hp-sprite.png");
-        imageView = new ImageView(image);
+        Image image = new Image("Sprites/Pacman10-hp-sprite.png");
+        map = new Map(mainPane);
+        //imageView = new ImageView(image);
         animation = new MainMenuAnimation(mainPane, 550);
         primaryScreenBounds = Screen.getPrimary().getVisualBounds();
         player = new Player();
@@ -53,16 +55,16 @@ class MapScene extends Scene {
             if (event.getCode() == KeyCode.ESCAPE) {
                 primaryStage.setScene(new MainMenu(new GridPane(), primaryStage));
             }
-            else if (event.getCode() == KeyCode.W) {
+            else if (event.getCode() == KeyCode.W || event.getCode() == KeyCode.UP) {
                 player.changeDir(direction.UP);
             }
-            else if (event.getCode() == KeyCode.S) {
+            else if (event.getCode() == KeyCode.S|| event.getCode() == KeyCode.DOWN) {
                 player.changeDir(direction.DOWN);
             }
-            else if (event.getCode() == KeyCode.D) {
+            else if (event.getCode() == KeyCode.D|| event.getCode() == KeyCode.RIGHT) {
                 player.changeDir(direction.RIGHT);
             }
-            else if (event.getCode() == KeyCode.A) {
+            else if (event.getCode() == KeyCode.A|| event.getCode() == KeyCode.LEFT) {
                 player.changeDir(direction.LEFT);
             }
         });
@@ -78,10 +80,10 @@ class MapScene extends Scene {
         final int y = 0;
         final int height = 138;
         final int width = 500;
-        imageView.setFitHeight(400);
-        imageView.setFitWidth(primaryScreenBounds.getWidth()+85);
-        imageView.setViewport(new Rectangle2D(x, y, width, height));
-        mainPane.getChildren().addAll(imageView, player);
+        //imageView.setFitHeight(400);
+        //imageView.setFitWidth(primaryScreenBounds.getWidth()+85);
+        //imageView.setViewport(new Rectangle2D(x, y, width, height));
+        mainPane.getChildren().addAll(/*imageView,*/ player);
     }
 
     /**

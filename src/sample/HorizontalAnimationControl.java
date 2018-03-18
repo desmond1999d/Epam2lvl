@@ -14,7 +14,7 @@ import javafx.scene.layout.Pane;
 
 class HorizontalAnimationControl {
 
-    private final Image image = new Image("sample/Pacman10-hp-sprite.png");
+    private final Image image = new Image("Sprites/Pacman10-hp-sprite.png");
     private IconsAnimated iconsAnimated;
 
     /**
