@@ -1,5 +1,6 @@
 package sample;
 
+import javafx.animation.AnimationTimer;
 import javafx.geometry.Insets;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
@@ -26,6 +27,7 @@ class MapScene extends Scene {
     private Stage primaryStage;
     private MainMenuAnimation animation;
     private Player player;
+    private RedGhost redGhost;
     private Map map;
 
     /**
@@ -45,9 +47,22 @@ class MapScene extends Scene {
         animation = new MainMenuAnimation(mainPane, 550);
         primaryScreenBounds = Screen.getPrimary().getVisualBounds();
         player = new Player();
+        redGhost = new RedGhost(0, 0, 10, 1);
         setEvents();
         buildMap();
         buildRecordPanel();
+        final AnimationTimer timer = new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                update();
+            }
+        };
+        timer.start();
+    }
+
+    private void update()
+    {
+        redGhost.setAim(player.posOnMapX, player.posOnMapY);
     }
 
     private void setEvents() {

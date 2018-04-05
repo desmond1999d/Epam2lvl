@@ -51,14 +51,13 @@ public class Map {
             for (int j = 0; j < xSize; j++) {
                 if (map[i].charAt(j) == '1') {
                     wall = new ImageView(wallImg);
-                    wall.setTranslateX(j*blockSize);
-                    wall.setTranslateY(i*blockSize);
+                    wall.setTranslateX(j * blockSize);
+                    wall.setTranslateY(i * blockSize);
                     pane.getChildren().addAll(wall);
-                }
-                else if (map[i].charAt(j) == '0') {
+                } else if (map[i].charAt(j) == '0') {
                     path = new ImageView(pathImg);
-                    path.setTranslateX(j*blockSize);
-                    path.setTranslateY(i*blockSize);
+                    path.setTranslateX(j * blockSize);
+                    path.setTranslateY(i * blockSize);
                     pane.getChildren().addAll(path);
                 }
             }
