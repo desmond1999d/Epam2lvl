@@ -20,7 +20,7 @@ public class RedGhost extends IconsAnimated {
         aimY = plPosY;
         posOnMapY = mapPosY;
         posOnMapX = mapPosX;
-        setTranslateX(/*dist*posOnMapX*/410);
+        setTranslateX(/*dist*posOnMapX*/40*25 - 10);
         setTranslateY(/*dist*posOnMapY*/42);
         final AnimationTimer timer = new AnimationTimer() {
             @Override

@@ -47,7 +47,7 @@ class MapScene extends Scene {
         animation = new MainMenuAnimation(mainPane, 550);
         primaryScreenBounds = Screen.getPrimary().getVisualBounds();
         player = new Player();
-        redGhost = new RedGhost(0, 0, 10, 1);
+        redGhost = new RedGhost(0, 0, 28, 1);
         setEvents();
         buildMap();
         buildRecordPanel();
@@ -98,7 +98,7 @@ class MapScene extends Scene {
         //imageView.setFitHeight(400);
         //imageView.setFitWidth(primaryScreenBounds.getWidth()+85);
         //imageView.setViewport(new Rectangle2D(x, y, width, height));
-        mainPane.getChildren().addAll(/*imageView,*/ player);
+        mainPane.getChildren().addAll(/*imageView,*/ player, redGhost);
     }
 
     /**
