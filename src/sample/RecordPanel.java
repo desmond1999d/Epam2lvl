@@ -7,6 +7,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 import java.awt.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 
 /**
  * sets the style of a record panel
@@ -20,22 +24,50 @@ public class RecordPanel {
     private Label oneUpValue;
     private Label twoUpValue;
     private Label highScoreValue;
+    private int oneUpInt;
+    private int twoUpInt;
+    private int highScoreInt;
 
     /**
      * constructor
      */
 
     public RecordPanel() {
+        oneUpInt = 0;
+        twoUpInt = 0;
+        highScoreInt = 0;
         oneUp = new Label("1UP");
         highScore = new Label("HIGH-SCORE");
         twoUp = new Label("2UP");
-        oneUpValue = new Label("00");
+        oneUpValue = new Label();
+        loadHighScoreFromFile();
         highScoreValue = new Label("00");
         twoUpValue = new Label("00");
         Font pacManFont = Font.loadFont(getClass()
                 .getResourceAsStream("Joystix.TTF"), 30);
         setColor();
         setFont(pacManFont);
+    }
+
+    private void loadHighScoreFromFile() {
+        File file = new File("GameResults.txt");
+        try {
+            if(!file.exists()){
+                file.createNewFile();
+            }
+            BufferedReader in = new BufferedReader(new FileReader( file.getAbsoluteFile()));
+            try {
+                String temp;
+                in.readLine();
+                temp = in.readLine();
+                setHighScore(Integer.parseInt(temp));
+            } finally {
+                in.close();
+                return;
+            }
+        } catch(IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -91,5 +123,44 @@ public class RecordPanel {
         pane.setConstraints(highScoreValue, highScoreX, highScoreY+1);
         pane.setConstraints(twoUpValue, twoUpX, twoUpY+1);
         pane.getChildren().addAll(oneUp, highScore, twoUp, oneUpValue, highScoreValue, twoUpValue);
+    }
+
+    public int getOneUpInt() {
+        return oneUpInt;
+    }
+
+    public int getTwoUpInt() {
+        return twoUpInt;
+    }
+
+    public int getHighScoreInt() {
+        return highScoreInt;
+    }
+
+    public void setOneUp(int newOneUp) {
+        oneUpInt = newOneUp;
+        oneUpValue.setText(String.valueOf(oneUpInt));
+    }
+
+    public void setHighScore(int newHighScore) {
+        highScoreInt = newHighScore;
+        highScoreValue.setText(String.valueOf(highScoreInt));
+    }
+
+    public void setTwoUp(int newTwoUp) {
+        twoUpInt = newTwoUp;
+        twoUpValue.setText(String.valueOf(twoUpInt));
+    }
+
+    public void setOneUpString(String newOneUp) {
+        oneUpValue.setText(newOneUp);
+    }
+
+    public void setHighScoreString(String newHighScore) {
+        highScoreValue.setText(newHighScore);
+    }
+
+    public void setTwoUpString(String newTwoUp) {
+        twoUpValue.setText(newTwoUp);
     }
 }

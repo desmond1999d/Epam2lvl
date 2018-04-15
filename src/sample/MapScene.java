@@ -12,7 +12,10 @@ import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
-import java.io.Console;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Vector;
 
 /**
  * class that constructs scene, where main gameplay will take place.
@@ -21,14 +24,17 @@ import java.io.Console;
 class MapScene extends Scene {
 
     private Pane mainPane;
-    //private ImageView imageView;
     private RecordPanel recordPanel;
     private Rectangle2D primaryScreenBounds;
     private Stage primaryStage;
     private MainMenuAnimation animation;
     private Player player;
     private RedGhost redGhost;
+    private PinkGhost pinkGhost;
+    private BrownGhost brownGhost;
     private Map map;
+    private Vector<MealClass> mealVector;
+    private MainMenu menu;
 
     /**
      * Constructor
@@ -36,18 +42,20 @@ class MapScene extends Scene {
      * @param stage primaryStage itself
      */
 
-    public MapScene(final Pane pane, final Stage stage){
+    public MapScene(final Pane pane, final Stage stage, MainMenu oldScene){
         super(pane);
+        menu = oldScene;
+        mealVector = new Vector<MealClass>();
         recordPanel = new RecordPanel();
         mainPane = pane;
         primaryStage = stage;
-        Image image = new Image("Sprites/Pacman10-hp-sprite.png");
         map = new Map(mainPane);
-        //imageView = new ImageView(image);
         animation = new MainMenuAnimation(mainPane, 550);
         primaryScreenBounds = Screen.getPrimary().getVisualBounds();
-        player = new Player();
-        redGhost = new RedGhost(0, 0, 28, 1);
+        player = new Player(mealVector, recordPanel, mainPane);
+        //redGhost = new RedGhost(0, 0, 28, 1, player, recordPanel, primaryStage);
+        //pinkGhost = new PinkGhost(0, 0, 28, 1, player, recordPanel, primaryStage);
+        //brownGhost = new BrownGhost(0, 0, 28, 1, player, recordPanel, primaryStage);
         setEvents();
         buildMap();
         buildRecordPanel();
@@ -58,17 +66,59 @@ class MapScene extends Scene {
             }
         };
         timer.start();
+        addMeal();
     }
 
-    private void update()
-    {
-        redGhost.setAim(player.posOnMapX, player.posOnMapY);
+    private void putInfoToFile(String path) {
+        File file;
+        PrintWriter printWriter;
+        file = new File(path);
+        try {
+            if(!file.exists()){
+                file.createNewFile();
+            }
+            printWriter = new PrintWriter(file.getAbsoluteFile());
+            printWriter.println(recordPanel.getOneUpInt());
+            printWriter.println(recordPanel.getHighScoreInt());
+            printWriter.println(recordPanel.getTwoUpInt());
+            printWriter.close();
+        } catch(IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void update() {
+        //redGhost.setAim(player.posOnMapX, player.posOnMapY);
+        //pinkGhost.setAim(player.posOnMapX, player.posOnMapY, player.dir);
+        //brownGhost.setAim(player.posOnMapX, player.posOnMapY);
+        if(mealVector.size() == 0)
+            addMeal();
+    }
+
+    private void addMeal() {
+        MealClass meal;
+        Image tempImage = new Image("Sprites/Pacman10-hp-sprite.png");
+        mainPane.getChildren().removeAll(mealVector);
+        mealVector.clear();
+        for(int i = 1; i < Map.ySize; i++) {
+            map.map[i] = map.map[i].replace('0', '2');
+            for(int j = 1; j < Map.xSize; j++)
+                if(map.map[i].charAt(j) == '2') {
+                    meal = new MealClass(j, i, tempImage);
+                    mealVector.addElement(meal);
+                    mainPane.getChildren().add(meal);
+                }
+        }
     }
 
     private void setEvents() {
         setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ESCAPE) {
-                primaryStage.setScene(new MainMenu(new GridPane(), primaryStage));
+                for(int i = 1; i < Map.ySize; i++)
+                    map.map[i] = map.map[i].replace('2', '0');
+                putInfoToFile("GameResults.txt");
+                menu.readInfoFromFile();
+                primaryStage.setScene(menu);
             }
             else if (event.getCode() == KeyCode.W || event.getCode() == KeyCode.UP) {
                 player.changeDir(direction.UP);
@@ -85,6 +135,12 @@ class MapScene extends Scene {
         });
     }
 
+    public void refresh() {
+        addMeal();
+        recordPanel.setOneUp(00);
+        player.setStartPos();
+    }
+
     /**
      * adds map to the scene
      */
@@ -95,10 +151,7 @@ class MapScene extends Scene {
         final int y = 0;
         final int height = 138;
         final int width = 500;
-        //imageView.setFitHeight(400);
-        //imageView.setFitWidth(primaryScreenBounds.getWidth()+85);
-        //imageView.setViewport(new Rectangle2D(x, y, width, height));
-        mainPane.getChildren().addAll(/*imageView,*/ player, redGhost);
+        mainPane.getChildren().addAll(player/*, redGhost, pinkGhost, redGhost, brownGhost*/);
     }
 
     /**
@@ -114,6 +167,5 @@ class MapScene extends Scene {
         columnConstraints.setPrefWidth(primaryScreenBounds.getWidth()/3);
         gridPane.getColumnConstraints().addAll(columnConstraints, columnConstraints, columnConstraints);
         mainPane.getChildren().addAll(gridPane);
-
     }
 }

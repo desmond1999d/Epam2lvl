@@ -17,7 +17,6 @@ public class Main extends Application {
         primaryStage.setTitle("Tests");
         Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
         MainMenu mainMenu = new MainMenu(new GridPane(), primaryStage);
-        MapScene mapScene = new MapScene(new Pane(), primaryStage);
 
         primaryStage.setWidth(primaryScreenBounds.getWidth());
         primaryStage.setHeight(primaryScreenBounds.getHeight());

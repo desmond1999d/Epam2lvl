@@ -20,8 +20,12 @@ public class PlayersQuantity {
     private ImageView choiseSymbol;
     private Stage primaryStage;
     private StackPane playerChoisePane;
+    private MapScene map;
+    private MainMenu menu;
 
-    public PlayersQuantity(final StackPane pane, final Stage stage) {
+    public PlayersQuantity(final StackPane pane, final Stage stage, final MapScene mapScene, final MainMenu mainMenu) {
+        menu = mainMenu;
+        map = mapScene;
         primaryStage = stage;
         playerChoisePane = pane;
         onePlayer = new Label("1 PLAYER");
@@ -99,7 +103,11 @@ public class PlayersQuantity {
         onePlayer.setOnMouseClicked(
                 event ->
                 {
-                    primaryStage.setScene(new MapScene(new Pane(), primaryStage));
+                    if (map == null)
+                        map = new MapScene(new Pane(), primaryStage, menu);
+                    else
+                        map.refresh();
+                    primaryStage.setScene(map);
                 }
         );
         onePlayer.setOnMouseExited(event->
@@ -118,7 +126,11 @@ public class PlayersQuantity {
         twoPlayers.setOnMouseClicked(
                 event ->
                 {
-                    primaryStage.setScene(new MapScene(new Pane(), primaryStage));
+                    if (map == null)
+                        map = new MapScene(new Pane(), primaryStage, menu);
+                    else
+                        map.refresh();
+                    primaryStage.setScene(map);
                 }
         );
     }

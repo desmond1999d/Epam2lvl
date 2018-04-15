@@ -8,7 +8,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 
 public class MainLogo {
-    private Image logoImage;
     private ImageView pacManLogo;
     private VBox logoBox;
 
@@ -18,7 +17,7 @@ public class MainLogo {
      */
 
     public MainLogo() {
-        logoImage = new Image("Sprites/Pacman_logo.png");
+        Image logoImage = new Image("Sprites/Pacman_logo.png");
         pacManLogo = new ImageView(logoImage);
         logoBox = new VBox();
         logoBox.setMinHeight(ConstantClass.MAINLOGOMINHEIGHT);

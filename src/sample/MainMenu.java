@@ -12,6 +12,8 @@ import javafx.scene.text.Font;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
+import java.io.*;
+
 public class MainMenu extends Scene {
 
     private GridPane pane;
@@ -24,6 +26,7 @@ public class MainMenu extends Scene {
     private Stage primaryStage;
     private boolean onePlayerChosen;
     private boolean twoPlayersChosen;
+    private MapScene map = null;
 
     /**
      * Constructor
@@ -38,10 +41,30 @@ public class MainMenu extends Scene {
         mainLogo = new MainLogo();
         playerChoisePane = new StackPane();
         recordPanel = new RecordPanel();
-        playersQuantity = new PlayersQuantity(playerChoisePane, primaryStage);
+        readInfoFromFile();
+        playersQuantity = new PlayersQuantity(playerChoisePane, primaryStage, map, this);
         anim = new MainMenuAnimation(pane, ConstantClass.SCENEANIMPOSY);
         getItTogether();
         setActions();
+    }
+
+    public void readInfoFromFile() {
+        File file = new File("GameResults.txt");
+        try {
+            if(!file.exists()){
+                file.createNewFile();
+            }
+            BufferedReader in = new BufferedReader(new FileReader( file.getAbsoluteFile()));
+            try {
+                recordPanel.setOneUpString(in.readLine());
+                recordPanel.setHighScoreString(in.readLine());
+                recordPanel.setTwoUpString(in.readLine());
+            } finally {
+                in.close();
+            }
+        } catch(IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -66,10 +89,24 @@ public class MainMenu extends Scene {
             }
             else if (event.getCode() == KeyCode.ENTER)
             {
-                if (onePlayerChosen)
-                    primaryStage.setScene(new MapScene(new Pane(), primaryStage));
-                else if (twoPlayersChosen)
-                    primaryStage.setScene(new MapScene(new Pane(), primaryStage));
+                if (onePlayerChosen) {
+                    if (map == null)
+                        map = new MapScene(new Pane(), primaryStage, this);
+                    else
+                        map.refresh();
+                    primaryStage.setScene(map);
+                }
+                else if (twoPlayersChosen) {
+                    if (map == null)
+                        map = new MapScene(new Pane(), primaryStage, this);
+                    else
+                        map.refresh();
+                    primaryStage.setScene(map);
+                }
+            }
+            else if (event.getCode() == KeyCode.ESCAPE) {
+                pane.getChildren().removeAll();
+                primaryStage.close();
             }
         });
     }

@@ -14,7 +14,6 @@ import javafx.scene.layout.Pane;
 
 class HorizontalAnimationControl {
 
-    private final Image image = new Image("Sprites/Pacman10-hp-sprite.png");
     private IconsAnimated iconsAnimated;
 
     /**
@@ -31,7 +30,7 @@ class HorizontalAnimationControl {
 
     HorizontalAnimationControl(final int columns, final int count, final int offsetX,
                                final int offsetY, final int width, final int height) {
-        ImageView imageView = new ImageView(image);
+        ImageView imageView = new ImageView(new Image("Sprites/Pacman10-hp-sprite.png"));
         imageView.setScaleX(ConstantClass.ANIMATIONUNITSCALE);
         imageView.setScaleY(ConstantClass.ANIMATIONUNITSCALE);
         iconsAnimated = new IconsAnimated(imageView, columns, count, offsetX, offsetY, width, height);

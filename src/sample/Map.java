@@ -5,14 +5,14 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
 public class Map {
-    public static final String[] map = new String[]
+    public static String[] map = new String[]
             {
                     "111111111111111111111111111111",//0
                     "100000000000000000000000000001",//1
                     "101011110111111101110101101101",//2
                     "100010000000000000000100000001",//3
                     "111010110111011101010101110111",//4
-                    "100010010101010101110101010001",//5
+                    "100010010131013101110101310001",//5
                     "111011110111011100000101110111",//6
                     "100000000000000001110000000001",//7
                     "101011111010111100100111101101",//8
@@ -47,16 +47,17 @@ public class Map {
     private ImageView path;
 
     public Map(Pane pane) {
+        //double offset = pane.getScene().getWidth()/2 - blockSize*xSize/2;
         for (int i = 0; i < ySize; i++) {
             for (int j = 0; j < xSize; j++) {
                 if (map[i].charAt(j) == '1') {
                     wall = new ImageView(wallImg);
-                    wall.setTranslateX(j * blockSize);
+                    wall.setTranslateX(j * blockSize/* + offset*/);
                     wall.setTranslateY(i * blockSize);
                     pane.getChildren().addAll(wall);
-                } else if (map[i].charAt(j) == '0') {
+                } else if (map[i].charAt(j) == '0' || map[i].charAt(j) == '3') {
                     path = new ImageView(pathImg);
-                    path.setTranslateX(j * blockSize);
+                    path.setTranslateX(j * blockSize/* + offset*/);
                     path.setTranslateY(i * blockSize);
                     pane.getChildren().addAll(path);
                 }

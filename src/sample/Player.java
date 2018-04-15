@@ -1,6 +1,12 @@
 package sample;
 
 import javafx.animation.AnimationTimer;
+import javafx.scene.layout.Pane;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Vector;
 
 enum direction {
     LEFT,
@@ -12,17 +18,23 @@ enum direction {
 
 public class Player extends IconsAnimated {
 
-    private direction dir;
+    public direction dir;
     private direction prevDir;
-    public int posOnMapX;
-    public int posOnMapY;
+    public int posOnMapX = 1;
+    public int posOnMapY = 1;
     private int wentX;
     private int wentY;
     private final int dist = Map.blockSize;
     private final int wentBorderPos = 25;
     private final int wentBorderNeg = -25;
+    private Vector<MealClass> mealVect;
+    private RecordPanel recordPanel;
+    private final Pane mainPane;
 
-    public Player() {
+    public Player(Vector<MealClass> mealClassVector, RecordPanel record, Pane pane) {
+        mainPane = pane;
+        recordPanel = record;
+        mealVect = mealClassVector;
         final AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
@@ -30,14 +42,25 @@ public class Player extends IconsAnimated {
             }
         };
         timer.start();
+        setStartPos();
+    }
+
+    private MealClass findMealByCoordinate(int x, int y) {
+        for (int i = 0; i < mealVect.size(); i++)
+            if(mealVect.get(i).getPosOnMapX() == x && mealVect.get(i).getPosOnMapY() == y)
+                return mealVect.get(i);
+        return null;
+    }
+
+    public void setStartPos() {
         dir = direction.STABLE;
-        posOnMapX = 1;
-        posOnMapY = 1;
         setTranslateX(41);
         setTranslateY(42);
         wentX = 0;
         wentY = 0;
         prevDir = dir;
+        posOnMapY = 1;
+        posOnMapX = 1;
     }
 
     public void changeDir(direction i) {
@@ -59,31 +82,27 @@ public class Player extends IconsAnimated {
     }
 
     public void update() {
+        MealClass mealTemp;
         switch (dir) {
             case UP:
-                if (Map.map[posOnMapY - 1].charAt(posOnMapX) == '0') {
+                if (Map.map[posOnMapY - 1].charAt(posOnMapX) == '0' || Map.map[posOnMapY - 1].charAt(posOnMapX) == '2') {
                     goUp();
                     wentY--;
                     if (Math.abs(wentY) >= dist) {
                         posOnMapY--;
-                        //System.out.println("X: " + posOnMapX + "\nY: " + posOnMapY);
                         wentY = 0;
                     }
                 } else {
-                    //Поворот справа
                     if (wentX <= wentBorderNeg) {
-                        if (Map.map[posOnMapY - 1].charAt(posOnMapX - 1) == '0') {
+                        if (Map.map[posOnMapY - 1].charAt(posOnMapX - 1) == '0' || Map.map[posOnMapY - 1].charAt(posOnMapX - 1) == '2') {
                             this.setTranslateX(this.getTranslateX() - (dist - Math.abs(wentX)));
-                            //изменение координаты
                             posOnMapX--;
                             wentX = 0;
                         }
                     }
-                    //Поворот слева
                     else if (wentX >= wentBorderPos) {
-                        if (Map.map[posOnMapY - 1].charAt(posOnMapX + 1) == '0') {
+                        if (Map.map[posOnMapY - 1].charAt(posOnMapX + 1) == '0' || Map.map[posOnMapY - 1].charAt(posOnMapX + 1) == '2') {
                             this.setTranslateX(this.getTranslateX() + dist - wentX);
-                            //изменение координаты
                             posOnMapX++;
                             wentX = 0;
                         }
@@ -92,29 +111,25 @@ public class Player extends IconsAnimated {
                 prevDir = dir;
                 break;
             case DOWN:
-                if (Map.map[posOnMapY + 1].charAt(posOnMapX) == '0') {
+                if (Map.map[posOnMapY + 1].charAt(posOnMapX) == '0' || Map.map[posOnMapY + 1].charAt(posOnMapX) == '2') {
                     goDown();
                     wentY++;
                     if (wentY >= dist) {
                         posOnMapY++;
-                        //System.out.println("X: " + posOnMapX + "\nY: " + posOnMapY);
                         wentY = 0;
                     }
                 } else {
-                    //Поворот справа
+
                     if (wentX <= wentBorderNeg) {
-                        if (Map.map[posOnMapY + 1].charAt(posOnMapX - 1) == '0') {
+                        if (Map.map[posOnMapY + 1].charAt(posOnMapX - 1) == '0' || Map.map[posOnMapY + 1].charAt(posOnMapX - 1) == '2') {
                             this.setTranslateX(this.getTranslateX() - (dist - Math.abs(wentX)));
-                            //изменение координаты
                             posOnMapX--;
                             wentX = 0;
                         }
                     }
-                    //Поворот слева
                     else if (wentX >= wentBorderPos) {
-                        if (Map.map[posOnMapY + 1].charAt(posOnMapX + 1) == '0') {
+                        if (Map.map[posOnMapY + 1].charAt(posOnMapX + 1) == '0' || Map.map[posOnMapY + 1].charAt(posOnMapX + 1) == '2') {
                             this.setTranslateX(this.getTranslateX() + dist - wentX);
-                            //изменение координаты
                             posOnMapX++;
                             wentX = 0;
                         }
@@ -123,27 +138,25 @@ public class Player extends IconsAnimated {
                 prevDir = dir;
                 break;
             case LEFT:
-                if (Map.map[posOnMapY].charAt(posOnMapX - 1) == '0') {
+                if (Map.map[posOnMapY].charAt(posOnMapX - 1) == '0' || Map.map[posOnMapY].charAt(posOnMapX - 1) == '2') {
                     if (prevDir == direction.LEFT || prevDir == direction.RIGHT) {
                         wentX--;
                         goLeft();
                         if (Math.abs(wentX) >= dist) {
                             posOnMapX--;
-                            //System.out.println("X: " + posOnMapX + "\nY: " + posOnMapY);
                             wentX = 0;
                         }
                     }
                 }
-                //Поворот
                 else {
                     if (wentY <= wentBorderNeg) {
-                        if (Map.map[posOnMapY - 1].charAt(posOnMapX - 1) == '0') {
+                        if (Map.map[posOnMapY - 1].charAt(posOnMapX - 1) == '0' || Map.map[posOnMapY - 1].charAt(posOnMapX - 1) == '2') {
                             this.setTranslateY(this.getTranslateY() - (dist - Math.abs(wentY)));
                             posOnMapY--;
                             wentY = 0;
                         }
                     } else if (wentY >= wentBorderPos) {
-                        if (Map.map[posOnMapY + 1].charAt(posOnMapX - 1) == '0') {
+                        if (Map.map[posOnMapY + 1].charAt(posOnMapX - 1) == '0' || Map.map[posOnMapY + 1].charAt(posOnMapX - 1) == '2') {
                             this.setTranslateY(this.getTranslateY() + (dist - Math.abs(wentY)));
                             posOnMapY++;
                             wentY = 0;
@@ -153,27 +166,25 @@ public class Player extends IconsAnimated {
                 prevDir = dir;
                 break;
             case RIGHT:
-                if (Map.map[posOnMapY].charAt(posOnMapX + 1) == '0') {
+                if (Map.map[posOnMapY].charAt(posOnMapX + 1) == '0' || Map.map[posOnMapY].charAt(posOnMapX + 1) == '2') {
                     if (prevDir == direction.LEFT || prevDir == direction.RIGHT) {
                         wentX++;
                         goRight();
                         if (wentX >= dist) {
                             posOnMapX++;
-                            //System.out.println("X: " + posOnMapX + "\nY: " + posOnMapY);
                             wentX = 0;
                         }
                     }
                 }
-                //Поворот
                 else {
                     if (wentY <= wentBorderNeg) {
-                        if (Map.map[posOnMapY - 1].charAt(posOnMapX + 1) == '0') {
+                        if (Map.map[posOnMapY - 1].charAt(posOnMapX + 1) == '0' || Map.map[posOnMapY - 1].charAt(posOnMapX + 1) == '2') {
                             this.setTranslateY(this.getTranslateY() - (dist - Math.abs(wentY)));
                             posOnMapY--;
                             wentY = 0;
                         }
                     } else if (wentY >= wentBorderPos) {
-                        if (Map.map[posOnMapY + 1].charAt(posOnMapX + 1) == '0') {
+                        if (Map.map[posOnMapY + 1].charAt(posOnMapX + 1) == '0' || Map.map[posOnMapY + 1].charAt(posOnMapX + 1) == '2') {
                             this.setTranslateY(this.getTranslateY() + (dist - Math.abs(wentY)));
                             posOnMapY++;
                             wentY = 0;
@@ -182,6 +193,20 @@ public class Player extends IconsAnimated {
                 }
                 prevDir = dir;
                 break;
+        }
+        if (Map.map[posOnMapY].charAt(posOnMapX) == '2') {
+            char[] tempString;
+            tempString = Map.map[posOnMapY].toCharArray();
+            tempString[posOnMapX] = '0';
+            Map.map[posOnMapY] = String.valueOf(tempString);
+            mealTemp = findMealByCoordinate(posOnMapX, posOnMapY);
+            if (mealTemp != null) {
+                mainPane.getChildren().remove(mealTemp);
+                recordPanel.setOneUp(recordPanel.getOneUpInt() + 1);
+                if (recordPanel.getOneUpInt() > recordPanel.getHighScoreInt())
+                    recordPanel.setHighScore(recordPanel.getOneUpInt());
+                mealVect.remove(mealTemp);
+            }
         }
     }
 }
