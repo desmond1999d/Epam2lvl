@@ -212,6 +212,11 @@ class MapScene extends Scene {
         ColumnConstraints columnConstraints = new ColumnConstraints();
         columnConstraints.setPrefWidth(primaryScreenBounds.getWidth()/3);
         gridPane.getColumnConstraints().addAll(columnConstraints, columnConstraints, columnConstraints);
+        recordPanel.loadInfoFromFile();
+        if (!emulate)
+            recordPanel.setOneUp(00);
+        else
+            recordPanel.setTwoUp(00);
         mainPane.getChildren().addAll(gridPane);
     }
 }

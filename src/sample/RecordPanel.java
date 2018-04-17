@@ -37,7 +37,6 @@ public class RecordPanel {
         highScore = new Label("HIGH-SCORE");
         twoUp = new Label("2UP");
         oneUpValue = new Label();
-        loadHighScoreFromFile();
         highScoreValue = new Label("00");
         twoUpValue = new Label("00");
         Font pacManFont = Font.loadFont(getClass()

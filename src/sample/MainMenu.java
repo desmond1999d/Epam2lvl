@@ -12,8 +12,6 @@ import javafx.scene.text.Font;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
-import java.io.*;
-
 public class MainMenu extends Scene {
 
     private GridPane pane;
