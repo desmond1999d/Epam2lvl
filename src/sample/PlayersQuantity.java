@@ -16,25 +16,27 @@ import javafx.stage.Stage;
 
 public class PlayersQuantity {
     private Label onePlayer;
-    private Label twoPlayers;
+    private Label gameEmulator;
     private ImageView choiseSymbol;
     private Stage primaryStage;
     private StackPane playerChoisePane;
     private MapScene map;
     private MainMenu menu;
+    private MapScene mapEmulated;
 
-    public PlayersQuantity(final StackPane pane, final Stage stage, final MapScene mapScene, final MainMenu mainMenu) {
+    public PlayersQuantity(final StackPane pane, final Stage stage, final MapScene mapScene, final MapScene mapEmul, final MainMenu mainMenu) {
         menu = mainMenu;
         map = mapScene;
+        mapEmulated = mapEmul;
         primaryStage = stage;
         playerChoisePane = pane;
         onePlayer = new Label("1 PLAYER");
-        twoPlayers = new Label("2 PLAYERS");
+        gameEmulator = new Label("EMULATE");
         choiseSymbol = new ImageView(new Image("Sprites/Original_PacMan.png"));
         choiseSymbolSettings();
         setActions();
         setAlligment(pane);
-        pane.getChildren().addAll(onePlayer, twoPlayers, choiseSymbol);
+        pane.getChildren().addAll(onePlayer, gameEmulator, choiseSymbol);
     }
 
     /** set font
@@ -43,7 +45,7 @@ public class PlayersQuantity {
      */
     public void setFont(final Font font) {
         onePlayer.setFont(font);
-        twoPlayers.setFont(font);
+        gameEmulator.setFont(font);
     }
 
     /** set color
@@ -53,7 +55,7 @@ public class PlayersQuantity {
 
     public void setColor(final Color color) {
         onePlayer.setTextFill(color);
-        twoPlayers.setTextFill(color);
+        gameEmulator.setTextFill(color);
     }
 
     /**
@@ -69,8 +71,8 @@ public class PlayersQuantity {
      * highlightion for two players label
      */
 
-    public void twoPlayersChosen() {
-        twoPlayers.setTextFill(Color.RED);
+    public void EmulationChosen() {
+        gameEmulator.setTextFill(Color.RED);
         playerChoisePane.setAlignment(choiseSymbol, Pos.BOTTOM_LEFT);
     }
 
@@ -86,8 +88,8 @@ public class PlayersQuantity {
      * return back from the highlightion state for two players label
      */
 
-    public void twoPlayersNotChosen() {
-        twoPlayers.setTextFill(Color.WHITE);
+    public void EmulationNotChosen() {
+        gameEmulator.setTextFill(Color.WHITE);
     }
 
     /**
@@ -104,9 +106,10 @@ public class PlayersQuantity {
                 event ->
                 {
                     if (map == null)
-                        map = new MapScene(new Pane(), primaryStage, menu);
+                        map = new MapScene(false, new Pane(), primaryStage, menu);
                     else
                         map.refresh();
+                    map.actionStart();
                     primaryStage.setScene(map);
                 }
         );
@@ -114,23 +117,24 @@ public class PlayersQuantity {
         {
             onePlayerNotChosen();
         });
-        twoPlayers.setOnMouseEntered(event ->
+        gameEmulator.setOnMouseEntered(event ->
                 {
-                    twoPlayersChosen();
+                    EmulationChosen();
                 }
         );
-        twoPlayers.setOnMouseExited(event->
+        gameEmulator.setOnMouseExited(event->
         {
-            twoPlayersNotChosen();
+            EmulationNotChosen();
         });
-        twoPlayers.setOnMouseClicked(
+        gameEmulator.setOnMouseClicked(
                 event ->
                 {
-                    if (map == null)
-                        map = new MapScene(new Pane(), primaryStage, menu);
+                    if (mapEmulated == null)
+                        mapEmulated = new MapScene(true, new Pane(), primaryStage, menu);
                     else
-                        map.refresh();
-                    primaryStage.setScene(map);
+                        mapEmulated.refresh();
+                    mapEmulated.actionStart();
+                    primaryStage.setScene(mapEmulated);
                 }
         );
     }
@@ -142,7 +146,7 @@ public class PlayersQuantity {
 
     public void setAlligment(final StackPane playerChoisePane) {
         playerChoisePane.setAlignment(onePlayer, Pos.CENTER);
-        playerChoisePane.setAlignment(twoPlayers, Pos.BOTTOM_CENTER);
+        playerChoisePane.setAlignment(gameEmulator, Pos.BOTTOM_CENTER);
         playerChoisePane.setAlignment(choiseSymbol, Pos.CENTER_LEFT);
     }
 

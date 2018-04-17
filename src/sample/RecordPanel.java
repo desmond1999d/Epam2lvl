@@ -7,10 +7,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 import java.awt.*;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 
 /**
  * sets the style of a record panel
@@ -49,7 +46,25 @@ public class RecordPanel {
         setFont(pacManFont);
     }
 
-    private void loadHighScoreFromFile() {
+    public void putInfoToFile(String path) {
+        File file;
+        PrintWriter printWriter;
+        file = new File(path);
+        try {
+            if(!file.exists()){
+                file.createNewFile();
+            }
+            printWriter = new PrintWriter(file.getAbsoluteFile());
+            printWriter.println(oneUpInt);
+            printWriter.println(highScoreInt);
+            printWriter.println(twoUpInt);
+            printWriter.close();
+        } catch(IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void loadHighScoreFromFile() {
         File file = new File("GameResults.txt");
         try {
             if(!file.exists()){
@@ -61,6 +76,30 @@ public class RecordPanel {
                 in.readLine();
                 temp = in.readLine();
                 setHighScore(Integer.parseInt(temp));
+            } finally {
+                in.close();
+                return;
+            }
+        } catch(IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void loadInfoFromFile() {
+        File file = new File("GameResults.txt");
+        try {
+            if(!file.exists()){
+                file.createNewFile();
+            }
+            BufferedReader in = new BufferedReader(new FileReader( file.getAbsoluteFile()));
+            try {
+                String temp;
+                temp = in.readLine();
+                setOneUp(Integer.parseInt(temp));
+                temp = in.readLine();
+                setHighScore(Integer.parseInt(temp));
+                temp = in.readLine();
+                setTwoUp(Integer.parseInt(temp));
             } finally {
                 in.close();
                 return;

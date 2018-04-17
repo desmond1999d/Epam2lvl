@@ -5,7 +5,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -29,12 +28,16 @@ class MapScene extends Scene {
     private Stage primaryStage;
     private MainMenuAnimation animation;
     private Player player;
+    private PacmanBot bot;
     private RedGhost redGhost;
     private PinkGhost pinkGhost;
     private BrownGhost brownGhost;
     private Map map;
     private Vector<MealClass> mealVector;
     private MainMenu menu;
+    private boolean emulate;
+    public final AnimationTimer timer;
+    public boolean exit = false;
 
     /**
      * Constructor
@@ -42,8 +45,9 @@ class MapScene extends Scene {
      * @param stage primaryStage itself
      */
 
-    public MapScene(final Pane pane, final Stage stage, MainMenu oldScene){
+    public MapScene(final boolean emu, final Pane pane, final Stage stage, MainMenu oldScene){
         super(pane);
+        emulate = emu;
         menu = oldScene;
         mealVector = new Vector<MealClass>();
         recordPanel = new RecordPanel();
@@ -52,47 +56,62 @@ class MapScene extends Scene {
         map = new Map(mainPane);
         animation = new MainMenuAnimation(mainPane, 550);
         primaryScreenBounds = Screen.getPrimary().getVisualBounds();
-        player = new Player(mealVector, recordPanel, mainPane);
-        //redGhost = new RedGhost(0, 0, 28, 1, player, recordPanel, primaryStage);
-        //pinkGhost = new PinkGhost(0, 0, 28, 1, player, recordPanel, primaryStage);
-        //brownGhost = new BrownGhost(0, 0, 28, 1, player, recordPanel, primaryStage);
+        if (!emulate)
+            player = new Player(mealVector, recordPanel, mainPane);
+        else
+            bot = new PacmanBot(mealVector, recordPanel, pane);
+        if (emu) {
+            redGhost = new RedGhost(0, 0, null, bot, primaryStage, this);
+            pinkGhost = new PinkGhost(0, 0, null, bot, primaryStage, this);
+            brownGhost = new BrownGhost(0, 0, null, bot, primaryStage, this);
+        }
+        else {
+            redGhost = new RedGhost(0, 0, player, null, primaryStage, this);
+            pinkGhost = new PinkGhost(0, 0, player, null, primaryStage, this);
+            brownGhost = new BrownGhost(0, 0, player, null, primaryStage, this);
+        }
         setEvents();
         buildMap();
         buildRecordPanel();
-        final AnimationTimer timer = new AnimationTimer() {
+        timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
                 update();
             }
         };
-        timer.start();
         addMeal();
     }
 
-    private void putInfoToFile(String path) {
-        File file;
-        PrintWriter printWriter;
-        file = new File(path);
-        try {
-            if(!file.exists()){
-                file.createNewFile();
-            }
-            printWriter = new PrintWriter(file.getAbsoluteFile());
-            printWriter.println(recordPanel.getOneUpInt());
-            printWriter.println(recordPanel.getHighScoreInt());
-            printWriter.println(recordPanel.getTwoUpInt());
-            printWriter.close();
-        } catch(IOException e) {
-            throw new RuntimeException(e);
+    private void update() {
+        if (!emulate) {
+            redGhost.setAim(player.posOnMapX, player.posOnMapY);
+            pinkGhost.setAim(player.posOnMapX, player.posOnMapY, player.dir);
+            brownGhost.setAim(player.posOnMapX, player.posOnMapY);
+        }
+        else {
+            redGhost.setAim(bot.posOnMapX, bot.posOnMapY);
+            pinkGhost.setAim(bot.posOnMapX, bot.posOnMapY, bot.dir);
+            brownGhost.setAim(bot.posOnMapX, bot.posOnMapY);
+        }
+        if(mealVector.size() == 0)
+            addMeal();
+        if (exit) {
+            exitScene();
         }
     }
 
-    private void update() {
-        //redGhost.setAim(player.posOnMapX, player.posOnMapY);
-        //pinkGhost.setAim(player.posOnMapX, player.posOnMapY, player.dir);
-        //brownGhost.setAim(player.posOnMapX, player.posOnMapY);
-        if(mealVector.size() == 0)
-            addMeal();
+    private void exitScene() {
+        exit = false;
+        for(int i = 1; i < Map.ySize; i++)
+            map.map[i] = map.map[i].replace('2', '0');
+        mainPane.getChildren().removeAll(mealVector);
+        mealVector.clear();
+        recordPanel.putInfoToFile("GameResults.txt");
+        menu.readInfoFromFile();
+        actionStop();
+        recordPanel.setOneUp(00);
+        recordPanel.setTwoUp(00);
+        primaryStage.setScene(menu);
     }
 
     private void addMeal() {
@@ -111,26 +130,43 @@ class MapScene extends Scene {
         }
     }
 
+    public void actionStop() {
+        if (!emulate)
+            player.timer.stop();
+        else
+            bot.timer.stop();
+        redGhost.timer.stop();
+        pinkGhost.timer.stop();
+        brownGhost.timer.stop();
+        timer.stop();
+    }
+
+    public void actionStart() {
+        if (!emulate)
+            player.timer.start();
+        else
+            bot.timer.start();
+        redGhost.timer.start();
+        pinkGhost.timer.start();
+        brownGhost.timer.start();
+        timer.start();
+    }
+
     private void setEvents() {
         setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ESCAPE) {
-                for(int i = 1; i < Map.ySize; i++)
-                    map.map[i] = map.map[i].replace('2', '0');
-                putInfoToFile("GameResults.txt");
-                menu.readInfoFromFile();
-                primaryStage.setScene(menu);
+                exitScene();
             }
-            else if (event.getCode() == KeyCode.W || event.getCode() == KeyCode.UP) {
-                player.changeDir(direction.UP);
-            }
-            else if (event.getCode() == KeyCode.S|| event.getCode() == KeyCode.DOWN) {
-                player.changeDir(direction.DOWN);
-            }
-            else if (event.getCode() == KeyCode.D|| event.getCode() == KeyCode.RIGHT) {
-                player.changeDir(direction.RIGHT);
-            }
-            else if (event.getCode() == KeyCode.A|| event.getCode() == KeyCode.LEFT) {
-                player.changeDir(direction.LEFT);
+            if(!emulate) {
+                if (event.getCode() == KeyCode.W || event.getCode() == KeyCode.UP) {
+                    player.changeDir(direction.UP);
+                } else if (event.getCode() == KeyCode.S || event.getCode() == KeyCode.DOWN) {
+                    player.changeDir(direction.DOWN);
+                } else if (event.getCode() == KeyCode.D || event.getCode() == KeyCode.RIGHT) {
+                    player.changeDir(direction.RIGHT);
+                } else if (event.getCode() == KeyCode.A || event.getCode() == KeyCode.LEFT) {
+                    player.changeDir(direction.LEFT);
+                }
             }
         });
     }
@@ -138,7 +174,13 @@ class MapScene extends Scene {
     public void refresh() {
         addMeal();
         recordPanel.setOneUp(00);
-        player.setStartPos();
+        if (!emulate)
+            player.setStartPos();
+        else
+            bot.setStartPos();
+        redGhost.reset();
+        pinkGhost.reset();
+        brownGhost.reset();
     }
 
     /**
@@ -151,7 +193,11 @@ class MapScene extends Scene {
         final int y = 0;
         final int height = 138;
         final int width = 500;
-        mainPane.getChildren().addAll(player/*, redGhost, pinkGhost, redGhost, brownGhost*/);
+        if (!emulate)
+            mainPane.getChildren().addAll(player);
+        else
+            mainPane.getChildren().addAll(bot);
+        mainPane.getChildren().addAll(redGhost, pinkGhost, brownGhost);
     }
 
     /**

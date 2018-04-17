@@ -25,8 +25,9 @@ public class MainMenu extends Scene {
     private MainMenuAnimation anim;
     private Stage primaryStage;
     private boolean onePlayerChosen;
-    private boolean twoPlayersChosen;
+    private boolean gameEmulatorChosen;
     private MapScene map = null;
+    private MapScene mapEmulated;
 
     /**
      * Constructor
@@ -41,30 +42,15 @@ public class MainMenu extends Scene {
         mainLogo = new MainLogo();
         playerChoisePane = new StackPane();
         recordPanel = new RecordPanel();
-        readInfoFromFile();
-        playersQuantity = new PlayersQuantity(playerChoisePane, primaryStage, map, this);
+        recordPanel.loadInfoFromFile();
+        playersQuantity = new PlayersQuantity(playerChoisePane, primaryStage, map, mapEmulated, this);
         anim = new MainMenuAnimation(pane, ConstantClass.SCENEANIMPOSY);
         getItTogether();
         setActions();
     }
 
     public void readInfoFromFile() {
-        File file = new File("GameResults.txt");
-        try {
-            if(!file.exists()){
-                file.createNewFile();
-            }
-            BufferedReader in = new BufferedReader(new FileReader( file.getAbsoluteFile()));
-            try {
-                recordPanel.setOneUpString(in.readLine());
-                recordPanel.setHighScoreString(in.readLine());
-                recordPanel.setTwoUpString(in.readLine());
-            } finally {
-                in.close();
-            }
-        } catch(IOException e) {
-            throw new RuntimeException(e);
-        }
+        recordPanel.loadInfoFromFile();
     }
 
     /**
@@ -76,32 +62,38 @@ public class MainMenu extends Scene {
             if (event.getCode() == KeyCode.UP)
             {
                 playersQuantity.onePlayerChosen();
-                playersQuantity.twoPlayersNotChosen();
+                playersQuantity.EmulationNotChosen();
                 onePlayerChosen = true;
-                twoPlayersChosen = false;
+                gameEmulatorChosen = false;
             }
             else if (event.getCode() == KeyCode.DOWN)
             {
-                playersQuantity.twoPlayersChosen();
+                playersQuantity.EmulationChosen();
                 playersQuantity.onePlayerNotChosen();
-                twoPlayersChosen = true;
+                gameEmulatorChosen = true;
                 onePlayerChosen = false;
             }
             else if (event.getCode() == KeyCode.ENTER)
             {
                 if (onePlayerChosen) {
+                    onePlayerChosen = false;
+                    playersQuantity.onePlayerNotChosen();
                     if (map == null)
-                        map = new MapScene(new Pane(), primaryStage, this);
+                        map = new MapScene(false, new Pane(), primaryStage, this);
                     else
                         map.refresh();
+                    map.actionStart();
                     primaryStage.setScene(map);
                 }
-                else if (twoPlayersChosen) {
-                    if (map == null)
-                        map = new MapScene(new Pane(), primaryStage, this);
+                else if (gameEmulatorChosen) {
+                    gameEmulatorChosen = false;
+                    playersQuantity.EmulationNotChosen();
+                    if (mapEmulated == null)
+                        mapEmulated = new MapScene(true, new Pane(), primaryStage, this);
                     else
-                        map.refresh();
-                    primaryStage.setScene(map);
+                        mapEmulated.refresh();
+                    mapEmulated.actionStart();
+                    primaryStage.setScene(mapEmulated);
                 }
             }
             else if (event.getCode() == KeyCode.ESCAPE) {

@@ -3,17 +3,22 @@ package sample;
 import javafx.stage.Stage;
 
 public class BrownGhost extends RedGhost {
-    public BrownGhost(int plPosX, int plPosY, int mapPosX, int mapPosY, Player pl, RecordPanel record, Stage primaty) {
+    public BrownGhost(int plPosX, int plPosY, Player pl, PacmanBot pacbot, Stage primaty, MapScene prevScene) {
+        currentScene = prevScene;
         primaryStage = primaty;
-        recordPanel = record;
         player = pl;
+        bot = pacbot;
         setSprite(2, 2, 80, 140);
         aimX = plPosX;
         aimY = plPosY;
-        posOnMapY = mapPosY;
-        posOnMapX = mapPosX;
-        setTranslateX(/*dist*posOnMapX*/40*25 - 10);
-        setTranslateY(/*dist*posOnMapY*/42);
+        startPosOnMapX = 28;
+        startPosOnMapY = 1;
+        posOnMapY = 1;
+        posOnMapX = 28;
+        startPosX = 40*25 - 10;
+        startPosY = 42;
+        setTranslateX(startPosX);
+        setTranslateY(startPosY);
     }
 
     @Override

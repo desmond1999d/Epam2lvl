@@ -30,18 +30,18 @@ public class Player extends IconsAnimated {
     private Vector<MealClass> mealVect;
     private RecordPanel recordPanel;
     private final Pane mainPane;
+    public final AnimationTimer timer;
 
     public Player(Vector<MealClass> mealClassVector, RecordPanel record, Pane pane) {
         mainPane = pane;
         recordPanel = record;
         mealVect = mealClassVector;
-        final AnimationTimer timer = new AnimationTimer() {
+        timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
                 update();
             }
         };
-        timer.start();
         setStartPos();
     }
 

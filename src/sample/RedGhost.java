@@ -23,8 +23,14 @@ public class RedGhost extends IconsAnimated {
     protected int went = 0;
     protected direction whereToGo = direction.STABLE;
     protected Player player = null;
-    protected RecordPanel recordPanel;
+    protected PacmanBot bot = null;
     protected Stage primaryStage;
+    protected int startPosX;
+    protected int startPosY;
+    protected int startPosOnMapX;
+    protected int startPosOnMapY;
+    public final AnimationTimer timer;
+    protected MapScene currentScene;
 
     public RedGhost() {
         setSprite(2, 2, 80, 80);
@@ -32,53 +38,54 @@ public class RedGhost extends IconsAnimated {
         aimY = 0;
         posOnMapY = 0;
         posOnMapX = 0;
-        setTranslateX(/*dist*posOnMapX*/40);
-        setTranslateY(/*dist*posOnMapY*/42);
-        final AnimationTimer timer = new AnimationTimer() {
+        startPosX = 40;
+        startPosY = 42;
+        startPosOnMapX = 1;
+        startPosOnMapY = 1;
+        setTranslateX(startPosX);
+        setTranslateY(startPosY);
+        timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
                 update();
             }
         };
-        timer.start();
     }
 
-    public RedGhost(int plPosX, int plPosY, int mapPosX, int mapPosY, Player pl, RecordPanel record, Stage primary) {
+    public RedGhost(int plPosX, int plPosY, Player pl, PacmanBot pacbot, Stage primary, MapScene mapScene) {
+        currentScene = mapScene;
         primaryStage = primary;
-        recordPanel = record;
         player = pl;
+        bot = pacbot;
         setSprite(2, 2, 80, 80);
         aimX = plPosX;
         aimY = plPosY;
-        posOnMapY = mapPosY;
-        posOnMapX = mapPosX;
-        setTranslateX(/*dist*posOnMapX*/40*25 - 10);
-        setTranslateY(/*dist*posOnMapY*/42);
-        final AnimationTimer timer = new AnimationTimer() {
+        posOnMapY = 1;
+        posOnMapX = 28;
+        startPosOnMapX = 28;
+        startPosOnMapY = 1;
+        startPosX = 40*25 - 10;
+        startPosY = 42;
+        setTranslateX(startPosX);
+        setTranslateY(startPosY);
+        timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
                 update();
             }
         };
-        timer.start();
     }
 
-    private void putInfoToFile(String path) {
-        File file;
-        PrintWriter printWriter;
-        file = new File(path);
-        try {
-            if(!file.exists()){
-                file.createNewFile();
-            }
-            printWriter = new PrintWriter(file.getAbsoluteFile());
-            printWriter.println(recordPanel.getOneUpInt());
-            printWriter.println(recordPanel.getHighScoreInt());
-            printWriter.println(recordPanel.getTwoUpInt());
-            printWriter.close();
-        } catch(IOException e) {
-            throw new RuntimeException(e);
-        }
+    public void reset() {
+        setTranslateX(startPosX);
+        setTranslateY(startPosY);
+        posOnMapX = startPosOnMapX;
+        posOnMapY = startPosOnMapY;
+        went = 0;
+        going = false;
+        dir = direction.STABLE;
+        prevDir = direction.STABLE;
+        whereToGo = direction.STABLE;
     }
 
     @Override
@@ -238,15 +245,24 @@ public class RedGhost extends IconsAnimated {
         return direction.STABLE;
     }
 
-    protected void update() {
-        System.out.println("Working");
-        if(posOnMapX == player.posOnMapX && posOnMapY == player.posOnMapY) {
-            putInfoToFile("GameResults.txt");
-            for(int i = 1; i < Map.ySize; i++)
-                Map.map[i] = Map.map[i].replace('2', '0');
-            primaryStage.setScene(new MainMenu(new GridPane(), primaryStage));
-            return;
+    protected void isDead() {
+        if (player != null && bot == null) {
+            if (posOnMapX == player.posOnMapX && posOnMapY == player.posOnMapY) {
+                currentScene.exit = true;
+                return;
+            }
         }
+        else if (bot != null && player == null) {
+            if (posOnMapX == bot.posOnMapX && posOnMapY == bot.posOnMapY) {
+                currentScene.exit = true;
+                return;
+            }
+        }
+    }
+
+    protected void update() {
+        if (went == 0)
+            isDead();
         if(!going) {
             prevDir = dir;
             dir = decideWichWay();
