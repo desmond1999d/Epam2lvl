@@ -2,10 +2,6 @@ package sample;
 
 import javafx.animation.AnimationTimer;
 import javafx.scene.layout.Pane;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Vector;
 
 enum direction {

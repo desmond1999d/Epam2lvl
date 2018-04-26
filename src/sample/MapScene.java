@@ -10,8 +10,11 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Vector;
@@ -22,6 +25,7 @@ import java.util.Vector;
 
 class MapScene extends Scene {
 
+    private static final String FILENAME= "C:\\Users\\desmond1999d\\Documents\\IntelliJIDEA\\Epam2lvl\\src\\GameFiles\\SavedGame.json";
     private Pane mainPane;
     private RecordPanel recordPanel;
     private Rectangle2D primaryScreenBounds;
@@ -38,6 +42,7 @@ class MapScene extends Scene {
     private boolean emulate;
     public final AnimationTimer timer;
     public boolean exit = false;
+    private JSONArray jsonArray;
 
     /**
      * Constructor
@@ -55,6 +60,7 @@ class MapScene extends Scene {
         primaryStage = stage;
         map = new Map(mainPane);
         animation = new MainMenuAnimation(mainPane, 550);
+        jsonArray = new JSONArray();
         primaryScreenBounds = Screen.getPrimary().getVisualBounds();
         if (!emulate)
             player = new Player(mealVector, recordPanel, mainPane);
@@ -83,6 +89,7 @@ class MapScene extends Scene {
     }
 
     private void update() {
+        putPosAndDirToJSON();
         if (!emulate) {
             redGhost.setAim(player.posOnMapX, player.posOnMapY);
             pinkGhost.setAim(player.posOnMapX, player.posOnMapY, player.dir);
@@ -109,9 +116,29 @@ class MapScene extends Scene {
         recordPanel.putInfoToFile("GameResults.txt");
         menu.readInfoFromFile();
         actionStop();
+        putInfoToJson();
         recordPanel.setOneUp(00);
         recordPanel.setTwoUp(00);
         primaryStage.setScene(menu);
+    }
+
+    private void putPosAndDirToJSON() {
+        JSONObject jsonString = new JSONObject();
+        jsonString.put("posOnMapX", player.getTranslateX());
+        jsonString.put("posOnMapY", player.getTranslateY());
+        jsonString.put("dir", player.dir.ordinal());
+        jsonArray.add(jsonString);
+    }
+
+    private void putInfoToJson() {
+        try (FileWriter writer = new FileWriter(FILENAME)){
+            writer.write(jsonArray.toJSONString());
+            writer.flush();
+            writer.close();
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage());
+        }
+        jsonArray.clear();
     }
 
     private void addMeal() {

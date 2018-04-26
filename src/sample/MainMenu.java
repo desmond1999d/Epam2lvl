@@ -25,7 +25,7 @@ public class MainMenu extends Scene {
     private boolean onePlayerChosen;
     private boolean gameEmulatorChosen;
     private MapScene map = null;
-    private MapScene mapEmulated;
+    private MapScene mapEmulated = null;
 
     /**
      * Constructor
