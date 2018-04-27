@@ -16,8 +16,6 @@ import java.io.IOException;
 
 public class Main extends Application {
 
-    private static final String FILENAME= "C:\\Users\\desmond1999d\\Documents\\IntelliJIDEA\\Epam2lvl\\src\\GameFiles\\SavedGame.json";
-
     @Override
     public void start(final Stage primaryStage) throws Exception{
         primaryStage.setTitle("Tests");
@@ -32,7 +30,7 @@ public class Main extends Application {
 
     /**
      * auto-generted method
-     * @param args
+     * @param args command line arguments
      */
 
     public static void main(final String[] args) {

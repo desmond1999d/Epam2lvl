@@ -4,6 +4,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
+/**
+ * class builds map and adds meal onto it
+ */
+
 public class Map {
     public static String[] map = new String[]
             {
@@ -46,18 +50,22 @@ public class Map {
     private ImageView wall;
     private ImageView path;
 
+    /**
+     * Allocates meal and map blocks onto the pane
+     * @param pane where to allocate map
+     */
+
     public Map(Pane pane) {
-        //double offset = pane.getScene().getWidth()/2 - blockSize*xSize/2;
         for (int i = 0; i < ySize; i++) {
             for (int j = 0; j < xSize; j++) {
                 if (map[i].charAt(j) == '1') {
                     wall = new ImageView(wallImg);
-                    wall.setTranslateX(j * blockSize/* + offset*/);
+                    wall.setTranslateX(j * blockSize);
                     wall.setTranslateY(i * blockSize);
                     pane.getChildren().addAll(wall);
                 } else if (map[i].charAt(j) == '0' || map[i].charAt(j) == '3') {
                     path = new ImageView(pathImg);
-                    path.setTranslateX(j * blockSize/* + offset*/);
+                    path.setTranslateX(j * blockSize);
                     path.setTranslateY(i * blockSize);
                     pane.getChildren().addAll(path);
                 }

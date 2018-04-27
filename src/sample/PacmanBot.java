@@ -6,6 +6,10 @@ import javafx.scene.layout.Pane;
 import java.util.Random;
 import java.util.Vector;
 
+/**
+ * bot that can replace real player. Act's randomly
+ */
+
 public class PacmanBot extends IconsAnimated {
     public direction dir;
     private direction prevDir;
@@ -18,6 +22,12 @@ public class PacmanBot extends IconsAnimated {
     private RecordPanel recordPanel;
     private final Pane mainPane;
     public final AnimationTimer timer;
+
+    /**
+     * @param mealClassVector Vector, that contains meal objects, allocated on the scene
+     * @param record Record panel on the map scene
+     * @param pane Pane, where all the data allocated
+     */
 
     public PacmanBot(Vector<MealClass> mealClassVector, RecordPanel record, Pane pane) {
         dir = direction.LEFT;
@@ -33,12 +43,22 @@ public class PacmanBot extends IconsAnimated {
         setStartPos();
     }
 
+    /**
+     * @param x
+     * @param y
+     * @return Returns the meal object, allocated in (x, y) position on the map or null
+     */
+
     private MealClass findMealByCoordinate(int x, int y) {
         for (int i = 0; i < mealVect.size(); i++)
             if(mealVect.get(i).getPosOnMapX() == x && mealVect.get(i).getPosOnMapY() == y)
                 return mealVect.get(i);
         return null;
     }
+
+    /**
+     * Places bot on it's start position
+     */
 
     public void setStartPos() {
         dir = direction.LEFT;
@@ -50,6 +70,11 @@ public class PacmanBot extends IconsAnimated {
         posOnMapY = 1;
         posOnMapX = 1;
     }
+
+    /**
+     * Changes the direction of a bot
+     * @param i new direction
+     */
 
     public void changeDir(direction i) {
         switch (i) {
@@ -69,6 +94,11 @@ public class PacmanBot extends IconsAnimated {
         dir = i;
     }
 
+    /**
+     * Translates bot positionX by (-1)
+     * Changes bot direction
+     */
+
     @Override
     public void goLeft() {
         prevDir = dir;
@@ -78,6 +108,11 @@ public class PacmanBot extends IconsAnimated {
         this.setTranslateX(this.getTranslateX() - 1);
         wentX--;
     }
+
+    /**
+     * Translates bot positionX by (+1)
+     * Changes bot direction
+     */
 
     @Override
     public void goRight() {
@@ -89,6 +124,11 @@ public class PacmanBot extends IconsAnimated {
         wentX++;
     }
 
+    /**
+     * Translates bot positionY by (-1)
+     * Changes bot direction
+     */
+
     @Override
     public void goUp() {
         prevDir = dir;
@@ -98,6 +138,11 @@ public class PacmanBot extends IconsAnimated {
         this.setTranslateY(this.getTranslateY() - 1);
         wentY--;
     }
+
+    /**
+     * Translates bot positionY by (+1)
+     * Changes bot direction
+     */
 
     @Override
     public void goDown() {
@@ -109,6 +154,11 @@ public class PacmanBot extends IconsAnimated {
         wentY++;
     }
 
+    /**
+     * Translates bot by 1 along the current direction
+     * @param dir current direction
+     */
+
     private void dirGo(direction dir) {
         switch (dir) {
             case LEFT: goLeft(); break;
@@ -117,6 +167,12 @@ public class PacmanBot extends IconsAnimated {
             case DOWN: goDown(); break;
         }
     }
+
+    /**
+     * decides whether bot can follow it's current direction
+     * @param dir bot's current direction
+     * @return true if is able not to change direction, else - false
+     */
 
     public boolean isAbleNotToChangeDir(direction dir) {
         switch (dir) {
@@ -140,12 +196,22 @@ public class PacmanBot extends IconsAnimated {
         return false;
     }
 
+    /**
+     * decides if bot is able to go left
+     * @return
+     */
+
     private boolean isAbleToGoLeft() {
         if(Map.map[posOnMapY].charAt(posOnMapX-1) == '0' || Map.map[posOnMapY].charAt(posOnMapX-1) == '2')
             return true;
         else
             return false;
     }
+
+    /**
+     * decides if bot is able to go right
+     * @return
+     */
 
     private boolean isAbleToGoRight() {
         if(Map.map[posOnMapY].charAt(posOnMapX+1) == '0' || Map.map[posOnMapY].charAt(posOnMapX+1) == '2')
@@ -154,6 +220,11 @@ public class PacmanBot extends IconsAnimated {
             return false;
     }
 
+    /**
+     * decides if bot is able to go up
+     * @return
+     */
+
     private boolean isAbleToGoUp() {
         if(Map.map[posOnMapY-1].charAt(posOnMapX) == '0' || Map.map[posOnMapY-1].charAt(posOnMapX) == '2')
             return true;
@@ -161,12 +232,21 @@ public class PacmanBot extends IconsAnimated {
             return false;
     }
 
+    /**
+     * decides if bot is able to go down
+     * @return
+     */
+
     private boolean isAbleToGoDown() {
         if(Map.map[posOnMapY+1].charAt(posOnMapX) == '0' || Map.map[posOnMapY+1].charAt(posOnMapX) == '2')
             return true;
         else
             return false;
     }
+
+    /**
+     * changes bot position on the map
+     */
 
     private void movePosOnMap()
     {
@@ -187,6 +267,10 @@ public class PacmanBot extends IconsAnimated {
             wentY = 0;
         }
     }
+
+    /**
+     * randomly choses the direction and follows it
+     */
 
     private void move() {
         movePosOnMap();
@@ -263,6 +347,11 @@ public class PacmanBot extends IconsAnimated {
             }
         }
     }
+
+    /**
+     * updates 2Up data on the record panel
+     * moves bot once per frame
+     */
 
     public void update() {
         MealClass mealTemp;

@@ -2,7 +2,21 @@ package sample;
 
 import javafx.stage.Stage;
 
+/**
+ * Brown ghost class
+ */
+
 public class BrownGhost extends RedGhost {
+
+    /**
+     * @param plPosX current player x position
+     * @param plPosY current player y position
+     * @param pl player object (aim)
+     * @param pacbot bot object (aim)
+     * @param primaty primary stage from Main class
+     * @param prevScene previous mapScene
+     */
+
     public BrownGhost(int plPosX, int plPosY, Player pl, PacmanBot pacbot, Stage primaty, MapScene prevScene) {
         currentScene = prevScene;
         primaryStage = primaty;
@@ -21,12 +35,22 @@ public class BrownGhost extends RedGhost {
         setTranslateY(startPosY);
     }
 
+    /**
+     * Translates bot positionX by (-1)
+     * and changes it's sprite
+     */
+
     @Override
     public void goLeft() {
         if (dir != prevDir)
             setSprite(2, 2, 80, 140);
         this.setTranslateX(this.getTranslateX() - 1);
     }
+
+    /**
+     * Translates bot positionX by (+1)
+     * and changes it's sprite
+     */
 
     @Override
     public void goRight() {
@@ -35,6 +59,11 @@ public class BrownGhost extends RedGhost {
         this.setTranslateX(this.getTranslateX() + 1);
     }
 
+    /**
+     * Translates bot positionY by (-1)
+     * and changes it's sprite
+     */
+
     @Override
     public void goUp() {
         if (dir != prevDir)
@@ -42,12 +71,23 @@ public class BrownGhost extends RedGhost {
         this.setTranslateY(this.getTranslateY() - 1);
     }
 
+    /**
+     * Translates bot positionY by (+1)
+     * and changes it's sprite
+     */
+
     @Override
     public void goDown() {
         if (dir != prevDir)
             setSprite(2, 2, 40, 140);
         this.setTranslateY(this.getTranslateY() + 1);
     }
+
+    /**
+     * Sets new aim for the bot
+     * @param newAimX X position of an aim
+     * @param newAimY Y position of an aim
+     */
 
     public void setAim(int newAimX, int newAimY) {
         double distance;
@@ -63,6 +103,5 @@ public class BrownGhost extends RedGhost {
             aimX = 1;
             aimY = 8;
         }
-        //System.out.println("aimX " + aimX + " aimY " + aimY + " dir " + dir + "\n");
     }
 }

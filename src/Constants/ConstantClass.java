@@ -10,4 +10,6 @@ public class ConstantClass {
     public static final int MAINLOGOCOLUMN = 1;
     public static final int MAINLOGORAW = 2;
     public static final int SCENEANIMPOSY = 500;
+    public static final String JSONFILENAME= "C:\\Users\\desmond1999d\\Documents\\IntelliJIDEA\\Epam2lvl\\src\\GameFiles\\SavedGame.json";
+    public static final String RECORDFILENAME = "C:\\Users\\desmond1999d\\Documents\\IntelliJIDEA\\Epam2lvl\\src\\GameFiles\\GameResults.txt";
 }

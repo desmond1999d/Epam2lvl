@@ -1,5 +1,6 @@
 package sample;
 
+import Constants.ConstantClass;
 import javafx.animation.AnimationTimer;
 import javafx.geometry.Insets;
 import javafx.geometry.Rectangle2D;
@@ -13,10 +14,8 @@ import javafx.stage.Stage;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Vector;
 
 /**
@@ -25,7 +24,6 @@ import java.util.Vector;
 
 class MapScene extends Scene {
 
-    private static final String FILENAME= "C:\\Users\\desmond1999d\\Documents\\IntelliJIDEA\\Epam2lvl\\src\\GameFiles\\SavedGame.json";
     private Pane mainPane;
     private RecordPanel recordPanel;
     private Rectangle2D primaryScreenBounds;
@@ -40,19 +38,24 @@ class MapScene extends Scene {
     private Vector<MealClass> mealVector;
     private MainMenu menu;
     private boolean emulate;
+    private boolean loading;
     public final AnimationTimer timer;
     public boolean exit = false;
     private JSONArray jsonArray;
+    private GameLoader gameLoader;
 
     /**
-     * Constructor
-     * @param pane required for scene constructor
-     * @param stage primaryStage itself
+     * creates map scene and starts all the actions depending on players choise
+     * @param emu boolean, that marks that the game must be emulated
+     * @param pane where to allocate all the stuff
+     * @param stage primarystage, created in Main class
+     * @param oldScene mainMenu scene object
      */
 
-    public MapScene(final boolean emu, final Pane pane, final Stage stage, MainMenu oldScene){
+    public MapScene(final boolean emu, final Pane pane, final Stage stage, MainMenu oldScene) {
         super(pane);
         emulate = emu;
+        loading = false;
         menu = oldScene;
         mealVector = new Vector<MealClass>();
         recordPanel = new RecordPanel();
@@ -70,8 +73,7 @@ class MapScene extends Scene {
             redGhost = new RedGhost(0, 0, null, bot, primaryStage, this);
             pinkGhost = new PinkGhost(0, 0, null, bot, primaryStage, this);
             brownGhost = new BrownGhost(0, 0, null, bot, primaryStage, this);
-        }
-        else {
+        } else {
             redGhost = new RedGhost(0, 0, player, null, primaryStage, this);
             pinkGhost = new PinkGhost(0, 0, player, null, primaryStage, this);
             brownGhost = new BrownGhost(0, 0, player, null, primaryStage, this);
@@ -88,32 +90,55 @@ class MapScene extends Scene {
         addMeal();
     }
 
+    /**
+     * Sends an aim info to bots
+     * Adds meal if needed
+     * Exits scene if needed
+     */
+
     private void update() {
-        putPosAndDirToJSON();
+        putPosAndDirToJSONObject();
         if (!emulate) {
             redGhost.setAim(player.posOnMapX, player.posOnMapY);
             pinkGhost.setAim(player.posOnMapX, player.posOnMapY, player.dir);
             brownGhost.setAim(player.posOnMapX, player.posOnMapY);
-        }
-        else {
+        } else {
             redGhost.setAim(bot.posOnMapX, bot.posOnMapY);
             pinkGhost.setAim(bot.posOnMapX, bot.posOnMapY, bot.dir);
             brownGhost.setAim(bot.posOnMapX, bot.posOnMapY);
         }
-        if(mealVector.size() == 0)
+        if (mealVector.size() == 0)
             addMeal();
         if (exit) {
             exitScene();
         }
     }
 
+    /**
+     * Creates GameLoader object and signalizes about game loading
+     */
+
+    public void startLoadActions() {
+        loading = true;
+        gameLoader = new GameLoader(player);
+        gameLoader.timer.start();
+    }
+
+    /**
+     * Stops all the actions on the scene
+     * Deletes all the meal from scene
+     * Puts stored intfo in JSON file
+     * Turns mainMenu scene on
+     */
+
     private void exitScene() {
         exit = false;
-        for(int i = 1; i < Map.ySize; i++)
+        loading = false;
+        for (int i = 1; i < Map.ySize; i++)
             map.map[i] = map.map[i].replace('2', '0');
         mainPane.getChildren().removeAll(mealVector);
         mealVector.clear();
-        recordPanel.putInfoToFile("GameResults.txt");
+        recordPanel.putInfoToFile();
         menu.readInfoFromFile();
         actionStop();
         putInfoToJson();
@@ -122,16 +147,26 @@ class MapScene extends Scene {
         primaryStage.setScene(menu);
     }
 
-    private void putPosAndDirToJSON() {
+    /**
+     * Adds player direction info to the jsonArray object
+     */
+
+    private void putPosAndDirToJSONObject() {
         JSONObject jsonString = new JSONObject();
-        jsonString.put("posOnMapX", player.getTranslateX());
-        jsonString.put("posOnMapY", player.getTranslateY());
-        jsonString.put("dir", player.dir.ordinal());
+        if (!emulate) {
+            jsonString.put("dir", player.dir.getValue());
+        } else {
+            jsonString.put("dir", bot.dir.ordinal());
+        }
         jsonArray.add(jsonString);
     }
 
+    /**
+     * Puts jsonArray info to the JSON file
+     */
+
     private void putInfoToJson() {
-        try (FileWriter writer = new FileWriter(FILENAME)){
+        try (FileWriter writer = new FileWriter(ConstantClass.JSONFILENAME)) {
             writer.write(jsonArray.toJSONString());
             writer.flush();
             writer.close();
@@ -141,21 +176,29 @@ class MapScene extends Scene {
         jsonArray.clear();
     }
 
+    /**
+     * Adds meal to the scene
+     */
+
     private void addMeal() {
         MealClass meal;
         Image tempImage = new Image("Sprites/Pacman10-hp-sprite.png");
         mainPane.getChildren().removeAll(mealVector);
         mealVector.clear();
-        for(int i = 1; i < Map.ySize; i++) {
+        for (int i = 1; i < Map.ySize; i++) {
             map.map[i] = map.map[i].replace('0', '2');
-            for(int j = 1; j < Map.xSize; j++)
-                if(map.map[i].charAt(j) == '2') {
+            for (int j = 1; j < Map.xSize; j++)
+                if (map.map[i].charAt(j) == '2') {
                     meal = new MealClass(j, i, tempImage);
                     mealVector.addElement(meal);
                     mainPane.getChildren().add(meal);
                 }
         }
     }
+
+    /**
+     * Stops all the actions on the scene
+     */
 
     public void actionStop() {
         if (!emulate)
@@ -168,6 +211,10 @@ class MapScene extends Scene {
         timer.stop();
     }
 
+    /**
+     * Starts all the actions on the scene
+     */
+
     public void actionStart() {
         if (!emulate)
             player.timer.start();
@@ -179,24 +226,48 @@ class MapScene extends Scene {
         timer.start();
     }
 
+    /**
+     * Sets W, A, S, D, ESC events
+     */
+
     private void setEvents() {
         setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ESCAPE) {
                 exitScene();
             }
-            if(!emulate) {
+            if (!emulate) {
                 if (event.getCode() == KeyCode.W || event.getCode() == KeyCode.UP) {
+                    if (loading) {
+                        gameLoader.timer.stop();
+                        loading = false;
+                    }
                     player.changeDir(direction.UP);
                 } else if (event.getCode() == KeyCode.S || event.getCode() == KeyCode.DOWN) {
+                    if (loading) {
+                        gameLoader.timer.stop();
+                        loading = false;
+                    }
                     player.changeDir(direction.DOWN);
                 } else if (event.getCode() == KeyCode.D || event.getCode() == KeyCode.RIGHT) {
+                    if (loading) {
+                        gameLoader.timer.stop();
+                        loading = false;
+                    }
                     player.changeDir(direction.RIGHT);
                 } else if (event.getCode() == KeyCode.A || event.getCode() == KeyCode.LEFT) {
+                    if (loading) {
+                        gameLoader.timer.stop();
+                        loading = false;
+                    }
                     player.changeDir(direction.LEFT);
                 }
             }
         });
     }
+
+    /**
+     * Places everything on it's start positions
+     */
 
     public void refresh() {
         addMeal();
@@ -237,7 +308,7 @@ class MapScene extends Scene {
         gridPane.setTranslateY(420);
         gridPane.setVgap(10);
         ColumnConstraints columnConstraints = new ColumnConstraints();
-        columnConstraints.setPrefWidth(primaryScreenBounds.getWidth()/3);
+        columnConstraints.setPrefWidth(primaryScreenBounds.getWidth() / 3);
         gridPane.getColumnConstraints().addAll(columnConstraints, columnConstraints, columnConstraints);
         recordPanel.loadInfoFromFile();
         if (!emulate)

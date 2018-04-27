@@ -11,6 +11,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+/**
+ * Bot class that acts randomly and is a parent for all the other ghosts
+ */
+
 public class RedGhost extends IconsAnimated {
     protected int aimX;
     protected int aimY;
@@ -52,6 +56,16 @@ public class RedGhost extends IconsAnimated {
         };
     }
 
+    /**
+     * Constructor
+     * @param plPosX X position of a player (used as an aim)
+     * @param plPosY Y position of a player (used as an aim)
+     * @param pl player (should be killed)
+     * @param pacbot bot (should be killed)
+     * @param primary primary stage, from Main class
+     * @param mapScene scene, where map is allocated
+     */
+
     public RedGhost(int plPosX, int plPosY, Player pl, PacmanBot pacbot, Stage primary, MapScene mapScene) {
         currentScene = mapScene;
         primaryStage = primary;
@@ -76,6 +90,10 @@ public class RedGhost extends IconsAnimated {
         };
     }
 
+    /**
+     * brings bot to it's start position
+     */
+
     public void reset() {
         setTranslateX(startPosX);
         setTranslateY(startPosY);
@@ -88,12 +106,22 @@ public class RedGhost extends IconsAnimated {
         whereToGo = direction.STABLE;
     }
 
+    /**
+     * Translates bot positionX by (-1)
+     * and changes it's sprite
+     */
+
     @Override
     public void goLeft() {
         if (dir != prevDir)
             setSprite(2, 2, 80, 80);
         this.setTranslateX(this.getTranslateX() - 1);
     }
+
+    /**
+     * Translates bot positionX by (+1)
+     * and changes it's sprite
+     */
 
     @Override
     public void goRight() {
@@ -102,12 +130,22 @@ public class RedGhost extends IconsAnimated {
         this.setTranslateX(this.getTranslateX() + 1);
     }
 
+    /**
+     * Translates bot positionY by (-1)
+     * and changes it's sprite
+     */
+
     @Override
     public void goUp() {
         if (dir != prevDir)
             setSprite(2, 2, 0, 80);
         this.setTranslateY(this.getTranslateY() - 1);
     }
+
+    /**
+     * Translates bot positionY by (+1)
+     * and changes it's sprite
+     */
 
     @Override
     public void goDown() {
@@ -116,11 +154,22 @@ public class RedGhost extends IconsAnimated {
         this.setTranslateY(this.getTranslateY() + 1);
     }
 
+    /**
+     * sets new aim
+     * @param newAimX obvious
+     * @param newAimY obvious
+     */
+
     public void setAim(int newAimX, int newAimY)
     {
         aimX = newAimX;
         aimY = newAimY;
     }
+
+    /**
+     * decides which way to go
+     * @return new direction
+     */
 
     protected direction decideWichWay() {
         if ((Math.abs(aimX - posOnMapX)) >= Math.abs(aimY - posOnMapY)) {
@@ -245,6 +294,10 @@ public class RedGhost extends IconsAnimated {
         return direction.STABLE;
     }
 
+    /**
+     * decides whether it caught a player or a bot
+     */
+
     protected void isDead() {
         if (player != null && bot == null) {
             if (posOnMapX == player.posOnMapX && posOnMapY == player.posOnMapY) {
@@ -259,6 +312,10 @@ public class RedGhost extends IconsAnimated {
             }
         }
     }
+
+    /**
+     * decides where to go and follows this direction
+     */
 
     protected void update() {
         if (went == 0)
@@ -314,7 +371,6 @@ public class RedGhost extends IconsAnimated {
                         posOnMapX++;
                         break;
                 }
-                //System.out.println("X: " + posOnMapX + " Y: " + posOnMapY + "\n");
                 went = 0;
             }
         }

@@ -51,6 +51,14 @@ public class SpriteAnimation extends Transition {
         setInterpolator(Interpolator.LINEAR);
     }
 
+    /**
+     * Sets new sprite package
+     * @param newCount quantity of sprites
+     * @param newColumns quantity of columns
+     * @param newOffX X offset on the sprite sheet
+     * @param newOffY Y offset on the sprite sheet
+     */
+
     public void setDir(final int newCount, final int newColumns, final int newOffX, final int newOffY) {
         this.offsetX = newOffX;
         this.offsetY = newOffY;

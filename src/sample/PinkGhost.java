@@ -1,9 +1,21 @@
 package sample;
 
-import javafx.animation.AnimationTimer;
 import javafx.stage.Stage;
 
+/**
+ * Pink ghost class whith a unique logics
+ */
+
 public class PinkGhost extends RedGhost {
+
+    /**
+     * @param plPosX X position of a player
+     * @param plPosY Y position of a player
+     * @param pl player object
+     * @param pacbot the aim of a bot if emulation is chosen
+     * @param primary primary stage from Main class
+     * @param prevScene main menu scene
+     */
 
     public PinkGhost(int plPosX, int plPosY, Player pl, PacmanBot pacbot, Stage primary, MapScene prevScene) {
         currentScene = prevScene;
@@ -23,12 +35,20 @@ public class PinkGhost extends RedGhost {
         setTranslateY(startPosY);
     }
 
+    /**
+     * Translates bot positionX by (-1)
+     */
+
     @Override
     public void goLeft() {
         if (dir != prevDir)
             setSprite(2, 2, 80, 100);
         this.setTranslateX(this.getTranslateX() - 1);
     }
+
+    /**
+     * Translates bot positionX by (+1)
+     */
 
     @Override
     public void goRight() {
@@ -37,6 +57,10 @@ public class PinkGhost extends RedGhost {
         this.setTranslateX(this.getTranslateX() + 1);
     }
 
+    /**
+     * Translates bot positionY by (-1)
+     */
+
     @Override
     public void goUp() {
         if (dir != prevDir)
@@ -44,12 +68,23 @@ public class PinkGhost extends RedGhost {
         this.setTranslateY(this.getTranslateY() - 1);
     }
 
+    /**
+     * Translates bot positionY by (+1)
+     */
+
     @Override
     public void goDown() {
         if (dir != prevDir)
             setSprite(2, 2, 40, 100);
         this.setTranslateY(this.getTranslateY() + 1);
     }
+
+    /**
+     * Tries to appear in front of a player (player direction + 4)
+     * @param newAimX new aim's X position
+     * @param newAimY new aim's Y position
+     * @param dir direction of an aim
+     */
 
     public void setAim(int newAimX, int newAimY, direction dir) {
         switch (dir) {
@@ -82,6 +117,5 @@ public class PinkGhost extends RedGhost {
                     aimX = newAimX - 4;
                 break;
         }
-        //System.out.println("aimX " + aimX + " aimY " + aimY + " dir " + dir + "\n");
     }
 }

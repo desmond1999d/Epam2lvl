@@ -4,13 +4,9 @@ import javafx.animation.AnimationTimer;
 import javafx.scene.layout.Pane;
 import java.util.Vector;
 
-enum direction {
-    LEFT,
-    RIGHT,
-    UP,
-    DOWN,
-    STABLE
-}
+/**
+ * class that provides controlls to the player
+ */
 
 public class Player extends IconsAnimated {
 
@@ -28,6 +24,12 @@ public class Player extends IconsAnimated {
     private final Pane mainPane;
     public final AnimationTimer timer;
 
+    /**
+     * @param mealClassVector Vector, that contains mealClass objects, allocated on the scene
+     * @param record Record panel, allocated on the scene
+     * @param pane Panel, where all the stuff allocated
+     */
+
     public Player(Vector<MealClass> mealClassVector, RecordPanel record, Pane pane) {
         mainPane = pane;
         recordPanel = record;
@@ -41,12 +43,23 @@ public class Player extends IconsAnimated {
         setStartPos();
     }
 
+    /**
+     * Finds a meal object, that is allocated on (x, y) position on the map
+     * @param x
+     * @param y
+     * @return MealClass object or null
+     */
+
     private MealClass findMealByCoordinate(int x, int y) {
         for (int i = 0; i < mealVect.size(); i++)
             if(mealVect.get(i).getPosOnMapX() == x && mealVect.get(i).getPosOnMapY() == y)
                 return mealVect.get(i);
         return null;
     }
+
+    /**
+     * Allocates player onto it's start position
+     */
 
     public void setStartPos() {
         dir = direction.STABLE;
@@ -58,6 +71,11 @@ public class Player extends IconsAnimated {
         posOnMapY = 1;
         posOnMapX = 1;
     }
+
+    /**
+     * chamges player direction
+     * @param i new direction
+     */
 
     public void changeDir(direction i) {
         switch (i) {
@@ -77,8 +95,36 @@ public class Player extends IconsAnimated {
         dir = i;
     }
 
-    public void update() {
+    /**
+     * Refreshes record panel info and deletes eaten meal
+     */
+
+    private void refreshRecordPanel() {
         MealClass mealTemp;
+        if (Map.map[posOnMapY].charAt(posOnMapX) == '2') {
+            char[] tempString;
+            tempString = Map.map[posOnMapY].toCharArray();
+            tempString[posOnMapX] = '0';
+            Map.map[posOnMapY] = String.valueOf(tempString);
+            mealTemp = findMealByCoordinate(posOnMapX, posOnMapY);
+            if (mealTemp != null) {
+                mainPane.getChildren().remove(mealTemp);
+                recordPanel.setOneUp(recordPanel.getOneUpInt() + 1);
+                if (recordPanel.getOneUpInt() > recordPanel.getHighScoreInt())
+                    recordPanel.setHighScore(recordPanel.getOneUpInt());
+                mealVect.remove(mealTemp);
+            }
+        }
+    }
+
+    /**
+     * Called once per frame
+     * decides whether player is able to go these or that way
+     * moves player on the scene and map
+     * refreshes record panel
+     */
+
+    public void update() {
         switch (dir) {
             case UP:
                 if (Map.map[posOnMapY - 1].charAt(posOnMapX) == '0' || Map.map[posOnMapY - 1].charAt(posOnMapX) == '2') {
@@ -190,19 +236,6 @@ public class Player extends IconsAnimated {
                 prevDir = dir;
                 break;
         }
-        if (Map.map[posOnMapY].charAt(posOnMapX) == '2') {
-            char[] tempString;
-            tempString = Map.map[posOnMapY].toCharArray();
-            tempString[posOnMapX] = '0';
-            Map.map[posOnMapY] = String.valueOf(tempString);
-            mealTemp = findMealByCoordinate(posOnMapX, posOnMapY);
-            if (mealTemp != null) {
-                mainPane.getChildren().remove(mealTemp);
-                recordPanel.setOneUp(recordPanel.getOneUpInt() + 1);
-                if (recordPanel.getOneUpInt() > recordPanel.getHighScoreInt())
-                    recordPanel.setHighScore(recordPanel.getOneUpInt());
-                mealVect.remove(mealTemp);
-            }
-        }
+        refreshRecordPanel();
     }
 }

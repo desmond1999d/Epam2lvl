@@ -7,6 +7,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 
+/**
+ * Class, that contains main pacman logo, that is located on the main scene
+ */
+
 public class MainLogo {
     private ImageView pacManLogo;
     private VBox logoBox;
@@ -24,7 +28,7 @@ public class MainLogo {
         pacManLogo.setScaleX(ConstantClass.MAINLOGOSCALE);
         pacManLogo.setScaleY(ConstantClass.MAINLOGOSCALE);
         logoBox.getChildren().addAll(pacManLogo);
-        logoBox.setAlignment(Pos.BOTTOM_CENTER);
+        logoBox.setAlignment(Pos.CENTER);
     }
 
     /**

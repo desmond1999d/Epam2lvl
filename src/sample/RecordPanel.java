@@ -1,5 +1,6 @@
 package sample;
 
+import Constants.ConstantClass;
 import javafx.geometry.HPos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
@@ -45,10 +46,10 @@ public class RecordPanel {
         setFont(pacManFont);
     }
 
-    public void putInfoToFile(String path) {
+    public void putInfoToFile() {
         File file;
         PrintWriter printWriter;
-        file = new File(path);
+        file = new File(ConstantClass.RECORDFILENAME);
         try {
             if(!file.exists()){
                 file.createNewFile();
@@ -63,29 +64,12 @@ public class RecordPanel {
         }
     }
 
-    public void loadHighScoreFromFile() {
-        File file = new File("GameResults.txt");
-        try {
-            if(!file.exists()){
-                file.createNewFile();
-            }
-            BufferedReader in = new BufferedReader(new FileReader( file.getAbsoluteFile()));
-            try {
-                String temp;
-                in.readLine();
-                temp = in.readLine();
-                setHighScore(Integer.parseInt(temp));
-            } finally {
-                in.close();
-                return;
-            }
-        } catch(IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
+    /**
+     * Loads Record panel info from specified file
+     */
 
     public void loadInfoFromFile() {
-        File file = new File("GameResults.txt");
+        File file = new File(ConstantClass.RECORDFILENAME);
         try {
             if(!file.exists()){
                 file.createNewFile();
@@ -175,28 +159,52 @@ public class RecordPanel {
         return highScoreInt;
     }
 
+    /**
+     * @param newOneUp new OneUp value
+     */
+
     public void setOneUp(int newOneUp) {
         oneUpInt = newOneUp;
         oneUpValue.setText(String.valueOf(oneUpInt));
     }
+
+    /**
+     * @param newHighScore new HighScore value
+     */
 
     public void setHighScore(int newHighScore) {
         highScoreInt = newHighScore;
         highScoreValue.setText(String.valueOf(highScoreInt));
     }
 
+    /**
+     * @param newTwoUp new TwoUp value
+     */
+
     public void setTwoUp(int newTwoUp) {
         twoUpInt = newTwoUp;
         twoUpValue.setText(String.valueOf(twoUpInt));
     }
 
+    /**
+     * @param newOneUp new OneUp string
+     */
+
     public void setOneUpString(String newOneUp) {
         oneUpValue.setText(newOneUp);
     }
 
+    /**
+     * @param newHighScore new HighScore string
+     */
+
     public void setHighScoreString(String newHighScore) {
         highScoreValue.setText(newHighScore);
     }
+
+    /**
+     * @param newTwoUp new TwoUp string
+     */
 
     public void setTwoUpString(String newTwoUp) {
         twoUpValue.setText(newTwoUp);

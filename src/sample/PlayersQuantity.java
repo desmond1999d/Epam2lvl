@@ -14,15 +14,28 @@ import javafx.stage.Stage;
  * the interface of choise of palyers quantity.
  */
 
+enum chosenLabel {
+    ONE_PLAYER,
+    GAME_EMULATOR,
+    LOAD_GAME,
+    NO_CHOISE
+}
+
+/**
+ * Block that provides an opportunity to choose a game mode
+ */
+
 public class PlayersQuantity {
     private Label onePlayer;
     private Label gameEmulator;
+    private Label loadGame;
     private ImageView choiseSymbol;
     private Stage primaryStage;
     private StackPane playerChoisePane;
     private MapScene map;
     private MainMenu menu;
     private MapScene mapEmulated;
+    public chosenLabel chosenOption;
 
     public PlayersQuantity(final StackPane pane, final Stage stage, final MapScene mapScene, final MapScene mapEmul, final MainMenu mainMenu) {
         menu = mainMenu;
@@ -30,32 +43,34 @@ public class PlayersQuantity {
         mapEmulated = mapEmul;
         primaryStage = stage;
         playerChoisePane = pane;
+        chosenOption = chosenLabel.NO_CHOISE;
         onePlayer = new Label("1 PLAYER");
         gameEmulator = new Label("EMULATE");
+        loadGame = new Label("LOAD GAME");
         choiseSymbol = new ImageView(new Image("Sprites/Original_PacMan.png"));
         choiseSymbolSettings();
         setActions();
         setAlligment(pane);
-        pane.getChildren().addAll(onePlayer, gameEmulator, choiseSymbol);
+        pane.getChildren().addAll(onePlayer, gameEmulator, loadGame, choiseSymbol);
     }
 
     /** set font
      * @param font - font for labels
-     * @return - nothing
      */
     public void setFont(final Font font) {
         onePlayer.setFont(font);
         gameEmulator.setFont(font);
+        loadGame.setFont(font);
     }
 
     /** set color
      * @param color - color for labels
-     * @return - nothing
      */
 
     public void setColor(final Color color) {
         onePlayer.setTextFill(color);
         gameEmulator.setTextFill(color);
+        loadGame.setTextFill(color);
     }
 
     /**
@@ -64,7 +79,7 @@ public class PlayersQuantity {
 
     public void onePlayerChosen() {
         onePlayer.setTextFill(Color.RED);
-        playerChoisePane.setAlignment(choiseSymbol, Pos.CENTER_LEFT);
+        playerChoisePane.setAlignment(choiseSymbol, Pos.TOP_LEFT);
     }
 
     /**
@@ -73,6 +88,15 @@ public class PlayersQuantity {
 
     public void EmulationChosen() {
         gameEmulator.setTextFill(Color.RED);
+        playerChoisePane.setAlignment(choiseSymbol, Pos.CENTER_LEFT);
+    }
+
+    /**
+     * highlightion for load game label
+     */
+
+    public void loadGameChosen() {
+        loadGame.setTextFill(Color.RED);
         playerChoisePane.setAlignment(choiseSymbol, Pos.BOTTOM_LEFT);
     }
 
@@ -93,13 +117,26 @@ public class PlayersQuantity {
     }
 
     /**
+     * return back from the highlightion state for load game label
+     */
+
+    public void loadGameNotChosen() {
+        loadGame.setTextFill(Color.WHITE);
+    }
+
+    /**
      * set envents for the labels
      */
 
     public void setActions() {
         onePlayer.setOnMouseEntered(event ->
                 {
+                    if (chosenOption == chosenLabel.GAME_EMULATOR)
+                        EmulationNotChosen();
+                    else if (chosenOption == chosenLabel.LOAD_GAME)
+                        loadGameNotChosen();
                     onePlayerChosen();
+                    chosenOption = chosenLabel.ONE_PLAYER;
                 }
         );
         onePlayer.setOnMouseClicked(
@@ -117,9 +154,40 @@ public class PlayersQuantity {
         {
             onePlayerNotChosen();
         });
+        loadGame.setOnMouseEntered(event ->
+                {
+                    if (chosenOption == chosenLabel.ONE_PLAYER)
+                        onePlayerNotChosen();
+                    else if (chosenOption == chosenLabel.GAME_EMULATOR)
+                        EmulationNotChosen();
+                    loadGameChosen();
+                    chosenOption = chosenLabel.LOAD_GAME;
+                }
+        );
+        loadGame.setOnMouseClicked(
+                event ->
+                {
+                    if (map == null)
+                        map = new MapScene(false, new Pane(), primaryStage, menu);
+                    else
+                        map.refresh();
+                    map.actionStart();
+                    map.startLoadActions();
+                    primaryStage.setScene(map);
+                }
+        );
+        loadGame.setOnMouseExited(event->
+        {
+            loadGameNotChosen();
+        });
         gameEmulator.setOnMouseEntered(event ->
                 {
                     EmulationChosen();
+                    if (chosenOption == chosenLabel.ONE_PLAYER)
+                        onePlayerNotChosen();
+                    else if (chosenOption == chosenLabel.LOAD_GAME)
+                        loadGameNotChosen();
+                    chosenOption = chosenLabel.GAME_EMULATOR;
                 }
         );
         gameEmulator.setOnMouseExited(event->
@@ -145,9 +213,10 @@ public class PlayersQuantity {
      */
 
     public void setAlligment(final StackPane playerChoisePane) {
-        playerChoisePane.setAlignment(onePlayer, Pos.CENTER);
-        playerChoisePane.setAlignment(gameEmulator, Pos.BOTTOM_CENTER);
-        playerChoisePane.setAlignment(choiseSymbol, Pos.CENTER_LEFT);
+        playerChoisePane.setAlignment(onePlayer, Pos.TOP_CENTER);
+        playerChoisePane.setAlignment(gameEmulator, Pos.CENTER);
+        playerChoisePane.setAlignment(loadGame, Pos.BOTTOM_CENTER);
+        playerChoisePane.setAlignment(choiseSymbol, Pos.TOP_LEFT);
     }
 
     /**

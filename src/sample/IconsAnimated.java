@@ -8,6 +8,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 
+/**
+ * Class that provides controls for the SpriteAnimation
+ */
+
 public class IconsAnimated extends Pane {
 
     private int columns;
@@ -76,8 +80,8 @@ public class IconsAnimated extends Pane {
 
     /**
      * sets the spawn point of an animation unit
-     * @param columns
-     * @param count
+     * @param columns quantity of columns
+     * @param count quantity of sprites
      * @param offsetX X position
      * @param offsetY Y position
      */
@@ -94,13 +98,25 @@ public class IconsAnimated extends Pane {
         this.setTranslateX(this.getTranslateX() - 1);
     }
 
+    /**
+     * moves an object to the right side of a scene
+     */
+
     public void goRight() {
         this.setTranslateX(this.getTranslateX() + 1);
     }
 
+    /**
+     * moves an object to the top of a scene
+     */
+
     public void goUp() {
         this.setTranslateY(this.getTranslateY() - 1);
     }
+
+    /**
+     * moves an object to the bottomn of a scene
+     */
 
     public void goDown() {
         this.setTranslateY(this.getTranslateY() + 1);

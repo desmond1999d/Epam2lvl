@@ -12,6 +12,10 @@ import javafx.scene.text.Font;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
+/**
+ * Class, that represents Main menu scene and all the actions on that scene
+ */
+
 public class MainMenu extends Scene {
 
     private GridPane pane;
@@ -24,13 +28,15 @@ public class MainMenu extends Scene {
     private Stage primaryStage;
     private boolean onePlayerChosen;
     private boolean gameEmulatorChosen;
+    private boolean loadGameChosen;
     private MapScene map = null;
-    private MapScene mapEmulated = null;
+    private MapScene mapEmulated;
 
     /**
      * Constructor
+     *
      * @param constructorPane pane for the scene constructor
-     * @param stage primaryStage itself
+     * @param stage           primaryStage itself
      */
 
     public MainMenu(final GridPane constructorPane, final Stage stage) {
@@ -47,6 +53,10 @@ public class MainMenu extends Scene {
         setActions();
     }
 
+    /**
+     * Load RecordPanel info from specified file
+     */
+
     public void readInfoFromFile() {
         recordPanel.loadInfoFromFile();
     }
@@ -57,22 +67,43 @@ public class MainMenu extends Scene {
 
     private void setActions() {
         setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.UP)
-            {
-                playersQuantity.onePlayerChosen();
-                playersQuantity.EmulationNotChosen();
-                onePlayerChosen = true;
-                gameEmulatorChosen = false;
-            }
-            else if (event.getCode() == KeyCode.DOWN)
-            {
-                playersQuantity.EmulationChosen();
-                playersQuantity.onePlayerNotChosen();
-                gameEmulatorChosen = true;
-                onePlayerChosen = false;
-            }
-            else if (event.getCode() == KeyCode.ENTER)
-            {
+            if (event.getCode() == KeyCode.UP) {
+                if (playersQuantity.chosenOption == chosenLabel.GAME_EMULATOR) {
+                    playersQuantity.onePlayerChosen();
+                    playersQuantity.chosenOption = chosenLabel.ONE_PLAYER;
+                    playersQuantity.EmulationNotChosen();
+                    onePlayerChosen = true;
+                    gameEmulatorChosen = false;
+                } else if (playersQuantity.chosenOption == chosenLabel.LOAD_GAME) {
+                    playersQuantity.EmulationChosen();
+                    playersQuantity.chosenOption = chosenLabel.GAME_EMULATOR;
+                    playersQuantity.loadGameNotChosen();
+                    gameEmulatorChosen = true;
+                    loadGameChosen = false;
+                } else if (playersQuantity.chosenOption == chosenLabel.NO_CHOISE) {
+                    playersQuantity.onePlayerChosen();
+                    playersQuantity.chosenOption = chosenLabel.ONE_PLAYER;
+                    onePlayerChosen = true;
+                }
+            } else if (event.getCode() == KeyCode.DOWN) {
+                if (playersQuantity.chosenOption == chosenLabel.GAME_EMULATOR) {
+                    playersQuantity.loadGameChosen();
+                    playersQuantity.EmulationNotChosen();
+                    playersQuantity.chosenOption = chosenLabel.LOAD_GAME;
+                    gameEmulatorChosen = false;
+                    loadGameChosen = true;
+                } else if (playersQuantity.chosenOption == chosenLabel.ONE_PLAYER) {
+                    playersQuantity.EmulationChosen();
+                    playersQuantity.onePlayerNotChosen();
+                    playersQuantity.chosenOption = chosenLabel.GAME_EMULATOR;
+                    onePlayerChosen = false;
+                    gameEmulatorChosen = true;
+                } else if (playersQuantity.chosenOption == chosenLabel.NO_CHOISE) {
+                    playersQuantity.chosenOption = chosenLabel.GAME_EMULATOR;
+                    playersQuantity.EmulationChosen();
+                    gameEmulatorChosen = true;
+                }
+            } else if (event.getCode() == KeyCode.ENTER) {
                 if (onePlayerChosen) {
                     onePlayerChosen = false;
                     playersQuantity.onePlayerNotChosen();
@@ -82,8 +113,7 @@ public class MainMenu extends Scene {
                         map.refresh();
                     map.actionStart();
                     primaryStage.setScene(map);
-                }
-                else if (gameEmulatorChosen) {
+                } else if (gameEmulatorChosen) {
                     gameEmulatorChosen = false;
                     playersQuantity.EmulationNotChosen();
                     if (mapEmulated == null)
@@ -92,9 +122,18 @@ public class MainMenu extends Scene {
                         mapEmulated.refresh();
                     mapEmulated.actionStart();
                     primaryStage.setScene(mapEmulated);
+                } else if (loadGameChosen) {
+                    loadGameChosen = false;
+                    playersQuantity.loadGameNotChosen();
+                    if (map == null)
+                        map = new MapScene(false, new Pane(), primaryStage, this);
+                    else
+                        map.refresh();
+                    map.actionStart();
+                    map.startLoadActions();
+                    primaryStage.setScene(map);
                 }
-            }
-            else if (event.getCode() == KeyCode.ESCAPE) {
+            } else if (event.getCode() == KeyCode.ESCAPE) {
                 pane.getChildren().removeAll();
                 primaryStage.close();
             }
@@ -120,7 +159,7 @@ public class MainMenu extends Scene {
         ColumnConstraints columnConstraints = new ColumnConstraints();
         pane.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
         Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
-        columnConstraints.setPrefWidth(primaryScreenBounds.getWidth()/ 3);
+        columnConstraints.setPrefWidth(primaryScreenBounds.getWidth() / 3);
         pane.getColumnConstraints().addAll(columnConstraints, columnConstraints, columnConstraints);
         pacManFont = Font.loadFont(getClass()
                 .getResourceAsStream("Joystix.TTF"), 30);
