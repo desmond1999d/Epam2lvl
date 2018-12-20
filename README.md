@@ -1,1 +1,1 @@
-# JavaFx pacman clone.
+# JavaFx-based pacman clone.
