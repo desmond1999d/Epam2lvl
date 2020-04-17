@@ -1,15 +1,7 @@
 package sample;
 
 import javafx.animation.AnimationTimer;
-import javafx.scene.Scene;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-
-import java.io.Console;
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
 
 /**
  * Bot class that acts randomly and is a parent for all the other ghosts

@@ -2,13 +2,9 @@ package sample;
 
 import javafx.application.Application;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.layout.*;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import org.json.simple.JSONObject;
-
-import java.io.FileWriter;
-import java.io.IOException;
 
 /**
  * This is the main class that preloads first scene
